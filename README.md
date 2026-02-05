@@ -118,7 +118,7 @@ go build -o sentinel-gate ./cmd/sentinel-gate
 sentinel-gate start --dev
 
 # Or with Docker
-docker run -d -p 8080:8080 ghcr.io/sentinel-gate/sentinelgate:latest --dev
+docker run -d -p 8080:8080 ghcr.io/sentinel-gate/sentinelgate:latest start --dev
 ```
 
 ### 3. Open the Admin UI
