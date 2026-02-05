@@ -33,7 +33,8 @@ Configuration:
 
 Commands:
   start       Start the proxy server
-  hash-key    Generate SHA256 hash for an API key`,
+  hash-key    Generate SHA256 hash for an API key
+  version     Print version information`,
 }
 
 // Execute runs the root command.

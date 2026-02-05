@@ -53,15 +53,23 @@ Examples:
 	RunE: runStart,
 }
 
+var devMode bool
+
 func init() {
+	startCmd.Flags().BoolVar(&devMode, "dev", false, "Enable development mode (verbose logging, relaxed validation)")
 	rootCmd.AddCommand(startCmd)
 }
 
 func runStart(cmd *cobra.Command, args []string) error {
-	// Load configuration
-	cfg, err := config.LoadConfig()
+	// Load configuration (without validation, so CLI flags can override first)
+	cfg, err := config.LoadConfigRaw()
 	if err != nil {
 		return fmt.Errorf("failed to load config: %w", err)
+	}
+
+	// Override dev mode from CLI flag
+	if devMode {
+		cfg.DevMode = true
 	}
 
 	// Override upstream command from args if provided
@@ -72,6 +80,14 @@ func runStart(cmd *cobra.Command, args []string) error {
 		} else {
 			cfg.Upstream.Args = nil
 		}
+	}
+
+	// Apply dev defaults (fills auth/policies if empty in dev mode)
+	cfg.SetDevDefaults()
+
+	// Validate the configuration
+	if err := cfg.Validate(); err != nil {
+		return fmt.Errorf("config validation failed: %w", err)
 	}
 
 	// Validate: either upstream.http OR upstream.command required
@@ -299,7 +315,7 @@ func run(ctx context.Context, cfg *config.OSSConfig, logger *slog.Logger) error 
 		sessionStore,
 		rateLimiter,
 		auditService,
-		"1.2.0", // TODO: inject from build flags later 
+		Version,
 	)
 
 	transportOpts := []http.Option{
