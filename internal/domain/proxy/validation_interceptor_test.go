@@ -7,10 +7,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 	"github.com/Sentinel-Gate/Sentinelgate/internal/domain/proxy"
 	"github.com/Sentinel-Gate/Sentinelgate/internal/domain/validation"
 	"github.com/Sentinel-Gate/Sentinelgate/pkg/mcp"
+	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 )
 
 // mockInterceptor records calls and returns configurable results.

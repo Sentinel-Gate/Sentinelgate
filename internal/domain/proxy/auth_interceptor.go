@@ -83,11 +83,11 @@ type AuthInterceptor struct {
 	sessionMu    sync.RWMutex
 
 	// Cleanup goroutine control
-	stopChan        chan struct{}   // Signal to stop cleanup goroutine
-	wg              sync.WaitGroup  // Wait for cleanup goroutine on shutdown
-	cleanupInterval time.Duration   // How often to run cleanup (default: 5 minutes)
-	cacheMaxAge     time.Duration   // Max time since last access before entry is removed (default: 30 minutes)
-	once            sync.Once       // Prevent double-close panic on Stop()
+	stopChan        chan struct{}  // Signal to stop cleanup goroutine
+	wg              sync.WaitGroup // Wait for cleanup goroutine on shutdown
+	cleanupInterval time.Duration  // How often to run cleanup (default: 5 minutes)
+	cacheMaxAge     time.Duration  // Max time since last access before entry is removed (default: 30 minutes)
+	once            sync.Once      // Prevent double-close panic on Stop()
 }
 
 // NewAuthInterceptor creates a new AuthInterceptor with default cleanup settings.
