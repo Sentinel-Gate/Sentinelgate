@@ -17,13 +17,23 @@ WORKDIR /app
 # Build configuration for static binary
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
+# Version info (override at build time with --build-arg)
+ARG VERSION=dev
+ARG COMMIT=none
+ARG BUILD_DATE=unknown
+
 # Download dependencies first (better layer caching)
 COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy source and build
 COPY . .
-RUN go build -trimpath -ldflags="-s -w" -o /sentinel-gate ./cmd/sentinel-gate
+RUN go build -trimpath \
+    -ldflags="-s -w \
+      -X github.com/Sentinel-Gate/Sentinelgate/cmd/sentinel-gate/cmd.Version=${VERSION} \
+      -X github.com/Sentinel-Gate/Sentinelgate/cmd/sentinel-gate/cmd.Commit=${COMMIT} \
+      -X github.com/Sentinel-Gate/Sentinelgate/cmd/sentinel-gate/cmd.BuildDate=${BUILD_DATE}" \
+    -o /sentinel-gate ./cmd/sentinel-gate
 
 # Stage 2: Runtime
 FROM gcr.io/distroless/static-debian12 AS runtime
