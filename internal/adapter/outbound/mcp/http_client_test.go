@@ -205,7 +205,7 @@ func TestScanner_LargeMessages(t *testing.T) {
 			for i := range msg {
 				msg[i] = 'x'
 			}
-			msg[0] = '{'           // Make it look like JSON-ish
+			msg[0] = '{' // Make it look like JSON-ish
 			msg[len(msg)-1] = '}'
 
 			// Create pipe and scanner with same config as HTTPClient
