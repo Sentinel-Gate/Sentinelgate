@@ -299,7 +299,7 @@ func run(ctx context.Context, cfg *config.OSSConfig, logger *slog.Logger) error 
 		sessionStore,
 		rateLimiter,
 		auditService,
-		"1.0.0", // TODO: inject from build flags later
+		"1.2.0", // TODO: inject from build flags later 
 	)
 
 	transportOpts := []http.Option{
