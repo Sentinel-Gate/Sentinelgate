@@ -138,8 +138,8 @@ func TestPolicyServiceBasicEvaluation(t *testing.T) {
 	}
 
 	tests := []struct {
-		name     string
-		toolName string
+		name      string
+		toolName  string
 		wantAllow bool
 	}{
 		{"read_file allowed", "read_file", true},

@@ -95,11 +95,11 @@ func BenchmarkAuditRecordWithBackpressure(b *testing.B) {
 	store := &mockSlowAuditStore{delay: time.Microsecond}
 
 	svc := NewAuditService(store, logger,
-		WithChannelSize(100),  // Smaller buffer to create pressure
+		WithChannelSize(100), // Smaller buffer to create pressure
 		WithBatchSize(10),
 		WithFlushInterval(10*time.Millisecond),
-		WithSendTimeout(time.Millisecond),  // Quick timeout for benchmark
-		WithAdaptiveFlushThreshold(50),     // Lower threshold for testing
+		WithSendTimeout(time.Millisecond), // Quick timeout for benchmark
+		WithAdaptiveFlushThreshold(50),    // Lower threshold for testing
 	)
 
 	ctx, cancel := context.WithCancel(context.Background())
