@@ -1,8 +1,8 @@
 package validation
 
 import (
-	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 	"github.com/Sentinel-Gate/Sentinelgate/pkg/mcp"
+	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 )
 
 // MessageValidator validates MCP messages for JSON-RPC compliance
