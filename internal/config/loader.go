@@ -67,7 +67,9 @@ func bindNestedEnvKeys() {
 }
 
 // LoadConfig reads the configuration file, applies environment overrides,
-// validates the result, and returns the OSSConfig.
+// sets defaults, and returns the OSSConfig.
+// Note: Caller should apply any CLI flag overrides (e.g. --dev), then call
+// cfg.SetDevDefaults() and cfg.Validate() to complete initialization.
 func LoadConfig() (*OSSConfig, error) {
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
@@ -85,11 +87,33 @@ func LoadConfig() (*OSSConfig, error) {
 	// Apply default values for optional fields
 	cfg.SetDefaults()
 
+	// In dev mode, apply permissive defaults before validation
+	cfg.SetDevDefaults()
+
 	// Validate the configuration
 	if err := cfg.Validate(); err != nil {
 		return nil, fmt.Errorf("config validation failed: %w", err)
 	}
 
+	return &cfg, nil
+}
+
+// LoadConfigRaw reads the configuration file and applies defaults,
+// but does NOT apply dev defaults or validate.
+// Use this when CLI flags may override DevMode before validation.
+func LoadConfigRaw() (*OSSConfig, error) {
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
+			return nil, fmt.Errorf("failed to read config file: %w", err)
+		}
+	}
+
+	var cfg OSSConfig
+	if err := viper.Unmarshal(&cfg); err != nil {
+		return nil, fmt.Errorf("failed to unmarshal config: %w", err)
+	}
+
+	cfg.SetDefaults()
 	return &cfg, nil
 }
 

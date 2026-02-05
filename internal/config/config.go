@@ -198,6 +198,58 @@ type RuleConfig struct {
 	Action string `yaml:"action" mapstructure:"action" validate:"required,oneof=allow deny"`
 }
 
+// SetDevDefaults applies permissive defaults for development mode.
+// This allows running sentinel-gate with minimal config (just upstream).
+// These defaults are applied BEFORE validation so required fields are satisfied.
+func (c *OSSConfig) SetDevDefaults() {
+	if !c.DevMode {
+		return
+	}
+
+	// Provide a default dev identity if none configured
+	if len(c.Auth.Identities) == 0 {
+		c.Auth.Identities = []IdentityConfig{
+			{
+				ID:    "dev-user",
+				Name:  "Development User",
+				Roles: []string{"admin"},
+			},
+		}
+	}
+
+	// Provide a default dev API key if none configured
+	// SHA256 of "dev-api-key"
+	if len(c.Auth.APIKeys) == 0 {
+		c.Auth.APIKeys = []APIKeyConfig{
+			{
+				KeyHash:    "sha256:6e1e4e1b8f8b36d08901cdb51b97841dfe20f5efd2fd2fd00768971408c46274",
+				IdentityID: "dev-user",
+			},
+		}
+	}
+
+	// Provide a default catch-all allow policy if none configured
+	if len(c.Policies) == 0 {
+		c.Policies = []PolicyConfig{
+			{
+				Name: "dev-allow-all",
+				Rules: []RuleConfig{
+					{
+						Name:      "allow-all",
+						Condition: "true",
+						Action:    "allow",
+					},
+				},
+			},
+		}
+	}
+
+	// Default audit to stdout if not configured
+	if c.Audit.Output == "" {
+		c.Audit.Output = "stdout"
+	}
+}
+
 // SetDefaults applies sensible default values to the configuration.
 func (c *OSSConfig) SetDefaults() {
 	// Server defaults
