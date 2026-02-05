@@ -6,8 +6,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 	"github.com/Sentinel-Gate/Sentinelgate/internal/domain/session"
+	"github.com/modelcontextprotocol/go-sdk/jsonrpc"
 )
 
 // Direction indicates the flow direction of a message through the proxy.
