@@ -389,7 +389,7 @@ func TestVerifyKey(t *testing.T) {
 	}
 
 	// Create SHA-256 hashes for backward compatibility testing
-	sha256Hash := HashKey(rawKey)                  // legacy bare hex
+	sha256Hash := HashKey(rawKey)                 // legacy bare hex
 	sha256Prefixed := "sha256:" + HashKey(rawKey) // prefixed format
 
 	tests := []struct {
