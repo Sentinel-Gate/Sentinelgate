@@ -1,0 +1,25 @@
+# Docker Compose for Sentinel Gate OSS
+# Single-service deployment - no external dependencies
+#
+# Usage:
+#   docker compose up -d          # Start service
+#   docker compose logs -f        # View logs
+#   docker compose down           # Stop service
+
+services:
+  sentinel-gate:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SENTINEL_GATE_DEV_MODE=true
+    volumes:
+      - ./sentinel-gate.example.yaml:/etc/sentinel-gate/sentinel-gate.yaml:ro
+    command: ["--config", "/etc/sentinel-gate/sentinel-gate.yaml", "start"]
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped

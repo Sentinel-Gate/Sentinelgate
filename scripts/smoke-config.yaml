@@ -1,0 +1,65 @@
+# Smoke Test Configuration for Sentinel Gate OSS
+# This config is used by scripts/smoke.sh for HTTP transport tests
+#
+# API Keys (DO NOT USE IN PRODUCTION):
+#   User key: smoke-test-key-12345
+#   Admin key: smoke-admin-key-67890
+
+# Server on non-standard port to avoid conflicts
+server:
+  http_addr: ":18080"
+
+# Upstream mock MCP server (started by smoke.sh)
+upstream:
+  http: "http://localhost:13000/mcp"
+
+# Authentication - two test identities
+auth:
+  identities:
+    - id: "test-user"
+      name: "Test User"
+      roles: ["user"]
+    - id: "test-admin"
+      name: "Test Admin"
+      roles: ["admin", "user"]
+  api_keys:
+    # smoke-test-key-12345
+    - key_hash: "sha256:87f80c8b91f13831cbc0293bacb85d7ad9cd5098d19a073c50121ae47033221c"
+      identity_id: "test-user"
+    # smoke-admin-key-67890
+    - key_hash: "sha256:0673c74bd54f659ea5c4e5da5570be90adc87e58f85a02730ed0e17fd5649b6b"
+      identity_id: "test-admin"
+
+# Audit to stdout
+audit:
+  output: "stdout"
+
+# Rate limiting - very low for testing
+rate_limit:
+  enabled: true
+  ip_rate: 2
+  user_rate: 5
+
+# Policies - test allow/deny behavior
+policies:
+  - name: "default"
+    rules:
+      # Allow read-prefixed tools
+      - name: "allow-read"
+        condition: 'tool_name.startsWith("read_")'
+        action: "allow"
+
+      # Allow admin users full access
+      - name: "allow-admin"
+        condition: '"admin" in user_roles'
+        action: "allow"
+
+      # Deny delete-prefixed tools
+      - name: "deny-delete"
+        condition: 'tool_name.startsWith("delete_")'
+        action: "deny"
+
+      # Catch-all allow for testing
+      - name: "allow-all"
+        condition: "true"
+        action: "allow"

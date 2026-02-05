@@ -1,0 +1,20 @@
+# Go workspace (local development only)
+go.work
+go.work.sum
+
+# Build artifacts
+/sentinel-gate
+*.exe
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Test artifacts
+coverage.out
+*.test
+.git.backup/
+sentinel-gate.yaml
+test-ui-config.yaml
+.DS_Store

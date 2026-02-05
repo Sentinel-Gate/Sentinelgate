@@ -1,0 +1,44 @@
+{{define "login"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sentinel Gate</title>
+    <link rel="stylesheet" href="/admin/static/styles.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="login-title">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                    Sentinel Gate
+                </h1>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Enter your admin API key to continue.</p>
+                <form method="post" action="/admin/login">
+                    <div class="form-group">
+                        <label class="form-label" for="api_key">Admin API Key</label>
+                        <input class="form-input" type="password" id="api_key" name="api_key" placeholder="your-api-key" required>
+                        {{if .DevMode}}
+                        <p class="form-hint">Dev mode: any non-empty key works</p>
+                        {{end}}
+                    </div>
+                    {{if .Error}}
+                    <div class="form-error">{{.Error}}</div>
+                    {{end}}
+                    <div class="login-actions">
+                        <button class="btn btn-primary" type="submit">Sign in</button>
+                        <a href="/health" class="btn btn-secondary">Health</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+{{end}}

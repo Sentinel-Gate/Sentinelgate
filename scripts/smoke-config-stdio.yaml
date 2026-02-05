@@ -1,0 +1,33 @@
+# Smoke Test Configuration for Sentinel Gate OSS - Stdio Mode
+# This config is used by scripts/smoke.sh for stdio transport tests
+#
+# Uses cat as upstream command (simple echo-back for testing)
+
+# Stdio mode - no HTTP server
+upstream:
+  command: "cat"
+
+# Dev mode - enables verbose logging
+dev_mode: true
+
+# Auth is required even in dev_mode (OSS requirement)
+auth:
+  identities:
+    - id: "stdio-test"
+      name: "Stdio Test User"
+      roles: ["user"]
+  api_keys:
+    - key_hash: "sha256:87f80c8b91f13831cbc0293bacb85d7ad9cd5098d19a073c50121ae47033221c"
+      identity_id: "stdio-test"
+
+# Audit to stdout
+audit:
+  output: "stdout"
+
+# Policies - allow everything in dev mode
+policies:
+  - name: "default"
+    rules:
+      - name: "allow-all"
+        condition: "true"
+        action: "allow"
