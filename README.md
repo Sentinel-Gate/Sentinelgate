@@ -5,7 +5,7 @@
 # Sentinel Gate
 
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
-[![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?logo=go)](https://go.dev)
+[![Go](https://img.shields.io/badge/Go-1.24+-00ADD8?logo=go)](https://go.dev)
 
 MCP proxy with policy enforcement for AI agents. Sits between your agents and MCP tools to provide authentication, access control, rate limiting, and audit logging.
 
@@ -102,7 +102,7 @@ sudo mv sentinel-gate /usr/local/bin/
 
 #### Option C: Build from source
 
-Requires Go 1.21+
+Requires Go 1.24+
 
 ```bash
 git clone https://github.com/Sentinel-Gate/Sentinelgate.git
@@ -382,6 +382,9 @@ To block DevMode from being enabled (recommended for production deployments):
 ```bash
 export SENTINELGATE_ALLOW_DEVMODE=false
 ```
+>**Note:** This variable uses the `SENTINELGATE_` prefix (without underscore) instead of `SENTINEL_GATE_`
+>because it is read directly via `os.Getenv()`, not through the Viper configuration layer.
+
 
 ### API Key Security
 
