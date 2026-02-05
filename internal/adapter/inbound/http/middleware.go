@@ -8,9 +8,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/google/uuid"
 	"github.com/Sentinel-Gate/Sentinelgate/internal/ctxkey"
 	"github.com/Sentinel-Gate/Sentinelgate/internal/domain/proxy"
+	"github.com/google/uuid"
 )
 
 // requestIDContextKey is the type for the request ID context key.
