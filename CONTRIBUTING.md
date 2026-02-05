@@ -8,7 +8,7 @@ We welcome code contributions. A CLA is required for all PRs so we can keep the 
 
 ```bash
 # Clone
-git clone https://github.com/sentinelgate/sentinelgate.git
+git clone https://github.com/Sentinel-Gate/Sentinelgate.git
 cd sentinelgate
 
 # Build
@@ -25,7 +25,7 @@ go test ./...
 
 ### Found a Bug?
 
-1. Check [existing issues](https://github.com/sentinelgate/sentinelgate/issues) first
+1. Check [existing issues](https://github.com/Sentinel-Gate/Sentinelgate/issues) first
 2. Open a new issue with:
    - What you expected
    - What happened
