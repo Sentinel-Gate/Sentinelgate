@@ -101,7 +101,7 @@ docker run -d \
 
 ### Build from Source
 
-Requires Go 1.21 or later:
+Requires Go 1.24 or later:
 
 ```bash
 git clone https://github.com/Sentinel-Gate/Sentinelgate.git
