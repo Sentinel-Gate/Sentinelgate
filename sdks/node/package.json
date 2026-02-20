@@ -1,0 +1,28 @@
+{
+  "name": "@sentinelgate/sdk",
+  "version": "0.1.0",
+  "description": "Node.js SDK for SentinelGate Policy Decision API",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "node --test tests/client.test.js"
+  },
+  "keywords": [
+    "sentinelgate",
+    "policy",
+    "security",
+    "agent",
+    "ai"
+  ],
+  "author": "SentinelGate",
+  "license": "AGPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sentinel-Gate/Sentinelgate"
+  },
+  "homepage": "https://github.com/Sentinel-Gate/Sentinelgate",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

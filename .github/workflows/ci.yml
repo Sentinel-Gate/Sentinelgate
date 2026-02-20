@@ -1,0 +1,141 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v7
+        with:
+          version: v2.1
+          args: --timeout=5m
+
+  test:
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - name: Run tests with race detector
+        shell: bash
+        run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
+      - name: Check coverage on critical packages
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          # Extract coverage for critical packages and enforce 65% threshold
+          CRITICAL_PKGS=(
+            "github.com/Sentinel-Gate/Sentinelgate/internal/adapter/outbound/state"
+            "github.com/Sentinel-Gate/Sentinelgate/internal/domain/proxy"
+            "github.com/Sentinel-Gate/Sentinelgate/internal/service"
+            "github.com/Sentinel-Gate/Sentinelgate/internal/adapter/inbound/admin"
+            "github.com/Sentinel-Gate/Sentinelgate/internal/adapter/outbound/cel"
+          )
+
+          FAIL=0
+          for pkg in "${CRITICAL_PKGS[@]}"; do
+            COV=$(go tool cover -func=coverage.out | grep "^${pkg}/" | tail -1 | awk '{print $NF}' | tr -d '%')
+            if [ -z "$COV" ]; then
+              echo "WARNING: No coverage data for $pkg"
+              continue
+            fi
+            echo "$pkg: ${COV}%"
+            COV_INT=${COV%.*}
+            if [ "$COV_INT" -lt 65 ]; then
+              echo "FAIL: $pkg coverage ${COV}% is below 65% threshold"
+              FAIL=1
+            fi
+          done
+
+          echo ""
+          echo "Overall coverage:"
+          go tool cover -func=coverage.out | tail -1
+
+          if [ "$FAIL" -eq 1 ]; then
+            echo "::error::Coverage below 65% on one or more critical packages"
+            exit 1
+          fi
+      - name: Upload coverage report
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.out
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - goos: linux
+            goarch: amd64
+          - goos: linux
+            goarch: arm64
+          - goos: darwin
+            goarch: amd64
+          - goos: darwin
+            goarch: arm64
+          - goos: windows
+            goarch: amd64
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - name: Build binary
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+        run: |
+          go build -ldflags="-s -w" -o sentinel-gate-${{ matrix.goos }}-${{ matrix.goarch }} ./cmd/sentinel-gate
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: sentinel-gate-${{ matrix.goos }}-${{ matrix.goarch }}
+          path: sentinel-gate-${{ matrix.goos }}-${{ matrix.goarch }}
+
+  smoke:
+    name: Smoke Test
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - name: Install dependencies
+        run: sudo apt-get update && sudo apt-get install -y jq
+      - name: Run smoke tests
+        run: bash scripts/smoke.sh
+
+  security:
+    name: Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+      - name: Install govulncheck
+        run: go install golang.org/x/vuln/cmd/govulncheck@latest
+      - name: Run vulnerability scan
+        run: govulncheck ./...

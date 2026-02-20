@@ -1,0 +1,95 @@
+version: 2
+
+project_name: sentinel-gate
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: sentinel-gate
+    main: ./cmd/sentinel-gate
+    binary: sentinel-gate
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w
+      - -X github.com/Sentinel-Gate/Sentinelgate/cmd/sentinel-gate/cmd.Version={{.Version}}
+      - -X github.com/Sentinel-Gate/Sentinelgate/cmd/sentinel-gate/cmd.Commit={{.ShortCommit}}
+      - -X github.com/Sentinel-Gate/Sentinelgate/cmd/sentinel-gate/cmd.BuildDate={{.Date}}
+
+archives:
+  - id: default
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+    format_overrides:
+      - goos: windows
+        format: zip
+
+checksum:
+  name_template: "checksums.txt"
+  algorithm: sha256
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^ci:"
+      - "^chore:"
+      - Merge pull request
+      - Merge branch
+
+dockers:
+  - image_templates:
+      - "ghcr.io/sentinel-gate/sentinel-gate:{{ .Version }}"
+      - "ghcr.io/sentinel-gate/sentinel-gate:latest"
+    dockerfile: Dockerfile.goreleaser
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description=MCP proxy with policy enforcement for AI agents"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+      - "--label=org.opencontainers.image.licenses=AGPL-3.0"
+    ids:
+      - sentinel-gate
+    goos: linux
+    goarch: amd64
+
+  - image_templates:
+      - "ghcr.io/sentinel-gate/sentinel-gate:{{ .Version }}-arm64"
+    dockerfile: Dockerfile.goreleaser
+    use: buildx
+    build_flag_templates:
+      - "--platform=linux/arm64"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.description=MCP proxy with policy enforcement for AI agents"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.source={{ .GitURL }}"
+      - "--label=org.opencontainers.image.licenses=AGPL-3.0"
+    ids:
+      - sentinel-gate
+    goos: linux
+    goarch: arm64
+
+release:
+  github:
+    owner: Sentinel-Gate
+    name: Sentinelgate
+  draft: false
+  prerelease: auto
+  name_template: "v{{ .Version }}"
