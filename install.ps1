@@ -13,6 +13,9 @@ $ErrorActionPreference = "Stop"
 # Ensure TLS 1.2 (required by GitHub; older PS 5.1 defaults to TLS 1.0/1.1)
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
+# Suppress progress bar (PS 5.1 progress rendering is pathologically slow on large downloads)
+$ProgressPreference = 'SilentlyContinue'
+
 $Repo = "Sentinel-Gate/Sentinelgate"
 $BinaryName = "sentinel-gate"
 
@@ -56,10 +59,10 @@ function Get-Version {
     } catch {
         Write-Info "No stable release found, checking pre-releases..."
         try {
-            $releases = Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases"
+            $releases = @(Invoke-RestMethod -Uri "https://api.github.com/repos/$Repo/releases")
             $version = $releases[0].tag_name
         } catch {
-            Write-Err "Failed to fetch releases from GitHub API."
+            Write-Err "Failed to fetch releases from GitHub API: $_"
         }
     }
 
@@ -95,7 +98,7 @@ function Install-SentinelGate {
         try {
             Invoke-WebRequest -Uri $archiveUrl -OutFile $archivePath -UseBasicParsing
         } catch {
-            Write-Err "Failed to download archive from $archiveUrl"
+            Write-Err "Failed to download archive from ${archiveUrl}: $_"
         }
 
         # Download checksums
@@ -104,7 +107,7 @@ function Install-SentinelGate {
         try {
             Invoke-WebRequest -Uri $checksumsUrl -OutFile $checksumsPath -UseBasicParsing
         } catch {
-            Write-Err "Failed to download checksums from $checksumsUrl"
+            Write-Err "Failed to download checksums from ${checksumsUrl}: $_"
         }
 
         # Verify checksum
@@ -147,12 +150,14 @@ function Install-SentinelGate {
         # Check if binary is locked (already running)
         if (Test-Path $destPath) {
             try {
-                [IO.File]::Open($destPath, 'Open', 'ReadWrite', 'None').Close()
+                [IO.File]::Open($destPath, 'Open', 'ReadWrite', 'Read').Close()
             } catch {
                 Write-Err "$BinaryName.exe is currently running. Please stop it first (sentinel-gate stop) and re-run the installer."
             }
         }
 
+        # Remove "downloaded from internet" mark to avoid SmartScreen popup
+        Unblock-File -Path $binaryPath
         Copy-Item -Path $binaryPath -Destination $destPath -Force
 
         # Add to PATH if not already there
@@ -180,6 +185,10 @@ function Install-SentinelGate {
     }
 }
 
-Install-SentinelGate
+try {
+    Install-SentinelGate
+} catch {
+    # Error already displayed by Write-Err; suppress duplicate stack trace
+}
 
 } # end of script block scope
