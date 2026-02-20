@@ -5,7 +5,13 @@
 #   VERSION      - specific version to install (e.g., v1.0.0-beta.2). Default: latest
 #   INSTALL_DIR  - installation directory. Default: %LOCALAPPDATA%\SentinelGate
 
+# Wrap everything in a script block to avoid leaking variables into caller's session via iex
+& {
+
 $ErrorActionPreference = "Stop"
+
+# Ensure TLS 1.2 (required by GitHub; older PS 5.1 defaults to TLS 1.0/1.1)
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 $Repo = "Sentinel-Gate/Sentinelgate"
 $BinaryName = "sentinel-gate"
@@ -137,6 +143,16 @@ function Install-SentinelGate {
         }
 
         $destPath = Join-Path $installDir "$BinaryName.exe"
+
+        # Check if binary is locked (already running)
+        if (Test-Path $destPath) {
+            try {
+                [IO.File]::Open($destPath, 'Open', 'ReadWrite', 'None').Close()
+            } catch {
+                Write-Err "$BinaryName.exe is currently running. Please stop it first (sentinel-gate stop) and re-run the installer."
+            }
+        }
+
         Copy-Item -Path $binaryPath -Destination $destPath -Force
 
         # Add to PATH if not already there
@@ -165,3 +181,5 @@ function Install-SentinelGate {
 }
 
 Install-SentinelGate
+
+} # end of script block scope
