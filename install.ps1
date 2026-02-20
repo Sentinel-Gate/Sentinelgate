@@ -47,8 +47,10 @@ function Get-Arch {
 
 function Get-Version {
     if ($env:VERSION) {
-        Write-Info "Using specified version: $env:VERSION"
-        return $env:VERSION
+        $v = $env:VERSION
+        if ($v -notmatch '^v') { $v = "v$v" }
+        Write-Info "Using specified version: $v"
+        return $v
     }
 
     Write-Info "Fetching latest release version..."
@@ -188,7 +190,10 @@ function Install-SentinelGate {
 try {
     Install-SentinelGate
 } catch {
-    # Error already displayed by Write-Err; suppress duplicate stack trace
+    if ($_.Exception.Message -notlike "Installation failed:*") {
+        Write-Host "ERROR: " -ForegroundColor Red -NoNewline
+        Write-Host "Unexpected error: $($_.Exception.Message)"
+    }
 }
 
 } # end of script block scope
