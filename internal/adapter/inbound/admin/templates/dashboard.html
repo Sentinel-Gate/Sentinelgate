@@ -1,0 +1,347 @@
+{{define "dashboard"}}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Sentinel Gate</title>
+    <link rel="stylesheet" href="/admin/static/styles.css">
+</head>
+<body>
+    <header class="header">
+        <a href="/admin" class="header-logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            Sentinel Gate
+        </a>
+        <nav class="header-nav">
+            <a href="/health">Health</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- Status Section -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Proxy Status</div>
+                <div class="stat-value success">Running</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Upstream</div>
+                <div class="stat-value" style="font-size: 16px;">{{.Upstream}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Active Policies</div>
+                <div class="stat-value">{{.PolicyCount}}</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Rules</div>
+                <div class="stat-value">{{.RuleCount}}</div>
+            </div>
+        </div>
+
+        <!-- Policies Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    Policies & Rules
+                </h2>
+            </div>
+            <div class="card-body">
+                {{if .Policies}}
+                {{range $pIdx, $policy := .Policies}}
+                <div class="policy-section">
+                    <div class="policy-header">
+                        <h3>{{$policy.Name}}</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showAddModal({{$pIdx}}, '{{$policy.Name}}')">
+                            + Add Rule
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rule Name</th>
+                                    <th>Condition (CEL)</th>
+                                    <th>Action</th>
+                                    <th style="width: 120px;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{range $rIdx, $rule := $policy.Rules}}
+                                <tr id="rule-{{$pIdx}}-{{$rIdx}}">
+                                    <td>{{$rule.Name}}</td>
+                                    <td><code class="code">{{$rule.Condition}}</code></td>
+                                    <td>
+                                        {{if eq $rule.Action "allow"}}
+                                        <span class="badge badge-success">Allow</span>
+                                        {{else}}
+                                        <span class="badge badge-danger">Deny</span>
+                                        {{end}}
+                                    </td>
+                                    <td class="actions">
+                                        <button class="btn btn-secondary btn-sm" onclick="showEditModal({{$pIdx}}, {{$rIdx}}, '{{$rule.Name}}', '{{$rule.Condition}}', '{{$rule.Action}}')">Edit</button>
+                                        <button class="btn btn-danger btn-sm" onclick="deleteRule({{$pIdx}}, {{$rIdx}}, '{{$rule.Name}}')">Delete</button>
+                                    </td>
+                                </tr>
+                                {{end}}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {{end}}
+                {{else}}
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                    <p>No policies configured</p>
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+        <!-- Recent Logs Section -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                    Recent Audit Logs
+                </h2>
+                <button class="btn btn-secondary btn-sm" onclick="location.reload()">Refresh</button>
+            </div>
+            <div class="card-body">
+                {{if .Logs}}
+                <div class="log-viewer">
+                    {{range .Logs}}
+                    <div class="log-entry">
+                        <span class="log-time">{{.Timestamp}}</span>
+                        <span class="{{if eq .Decision "allow"}}log-allow{{else}}log-deny{{end}}">[{{.Decision}}]</span>
+                        <span>{{.ToolName}}</span>
+                        <span class="text-muted">user={{.IdentityID}}</span>
+                    </div>
+                    {{end}}
+                </div>
+                {{else}}
+                <div class="empty-state">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <p>No audit logs yet</p>
+                </div>
+                {{end}}
+            </div>
+        </div>
+
+        <!-- Config Info -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Configuration
+                </h2>
+            </div>
+            <div class="card-body">
+                <table>
+                    <tr>
+                        <td><strong>Listen Address</strong></td>
+                        <td><code class="code">{{.ListenAddr}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Upstream</strong></td>
+                        <td><code class="code">{{.Upstream}}</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Dev Mode</strong></td>
+                        <td>
+                            {{if .DevMode}}
+                            <span class="badge badge-warning">Enabled</span>
+                            {{else}}
+                            <span class="badge badge-gray">Disabled</span>
+                            {{end}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Rate Limiting</strong></td>
+                        <td>
+                            {{if .RateLimitEnabled}}
+                            <span class="badge badge-success">Enabled</span>
+                            {{else}}
+                            <span class="badge badge-gray">Disabled</span>
+                            {{end}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><strong>Audit Output</strong></td>
+                        <td><code class="code">{{.AuditOutput}}</code></td>
+                    </tr>
+                    {{if .ConfigPath}}
+                    <tr>
+                        <td><strong>Config File</strong></td>
+                        <td><code class="code">{{.ConfigPath}}</code></td>
+                    </tr>
+                    {{end}}
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Rule Modal -->
+    <div id="ruleModal" class="modal-backdrop" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">Add Rule</h3>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="ruleForm" onsubmit="submitRule(event)">
+                <div class="modal-body">
+                    <input type="hidden" id="policyIndex" value="">
+                    <input type="hidden" id="ruleIndex" value="-1">
+                    <input type="hidden" id="isEdit" value="false">
+
+                    <div class="form-group">
+                        <label class="form-label" for="ruleName">Rule Name *</label>
+                        <input type="text" id="ruleName" name="name" class="form-input" required
+                               placeholder="e.g., allow-read-tools">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="ruleCondition">CEL Condition *</label>
+                        <textarea id="ruleCondition" name="condition" class="form-textarea" required
+                                  placeholder="e.g., tool_name.startsWith(&quot;read_&quot;)"></textarea>
+                        <div class="form-hint">
+                            Variables: <code>tool_name</code>, <code>user_roles</code>, <code>identity_id</code>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="ruleAction">Action *</label>
+                        <select id="ruleAction" name="action" class="form-select" required>
+                            <option value="allow">Allow</option>
+                            <option value="deny">Deny</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Add Rule</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showAddModal(policyIndex, policyName) {
+            document.getElementById('modalTitle').textContent = 'Add Rule to ' + policyName;
+            document.getElementById('submitBtn').textContent = 'Add Rule';
+            document.getElementById('policyIndex').value = policyIndex;
+            document.getElementById('ruleIndex').value = -1;
+            document.getElementById('isEdit').value = 'false';
+            document.getElementById('ruleName').value = '';
+            document.getElementById('ruleCondition').value = '';
+            document.getElementById('ruleAction').value = 'allow';
+            document.getElementById('ruleModal').style.display = 'flex';
+        }
+
+        function showEditModal(policyIndex, ruleIndex, name, condition, action) {
+            document.getElementById('modalTitle').textContent = 'Edit Rule';
+            document.getElementById('submitBtn').textContent = 'Save Changes';
+            document.getElementById('policyIndex').value = policyIndex;
+            document.getElementById('ruleIndex').value = ruleIndex;
+            document.getElementById('isEdit').value = 'true';
+            document.getElementById('ruleName').value = name;
+            document.getElementById('ruleCondition').value = condition;
+            document.getElementById('ruleAction').value = action;
+            document.getElementById('ruleModal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('ruleModal').style.display = 'none';
+        }
+
+        async function submitRule(event) {
+            event.preventDefault();
+
+            const isEdit = document.getElementById('isEdit').value === 'true';
+            const data = {
+                policyIndex: parseInt(document.getElementById('policyIndex').value),
+                ruleIndex: parseInt(document.getElementById('ruleIndex').value),
+                name: document.getElementById('ruleName').value,
+                condition: document.getElementById('ruleCondition').value,
+                action: document.getElementById('ruleAction').value
+            };
+
+            try {
+                const response = await fetch('/admin/api/rules', {
+                    method: isEdit ? 'PUT' : 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    const result = await response.json();
+                    alert('Error: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        async function deleteRule(policyIndex, ruleIndex, name) {
+            if (!confirm('Delete rule "' + name + '"?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/admin/api/rules', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ policyIndex, ruleIndex })
+                });
+
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    const result = await response.json();
+                    alert('Error: ' + (result.error || 'Unknown error'));
+                }
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+        }
+
+        // Close modal on backdrop click
+        document.getElementById('ruleModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+    </script>
+</body>
+</html>
+{{end}}

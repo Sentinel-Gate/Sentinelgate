@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tools.js Unit Tests</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #1a1a2e; color: #e0e0e0; }
+    h1 { color: #a78bfa; margin-bottom: 24px; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; font-weight: bold; }
+    .suite { margin: 16px 0 8px; font-weight: bold; color: #5eead4; }
+    .summary { margin-top: 24px; padding: 12px; border-top: 1px solid #333; }
+  </style>
+</head>
+<body>
+  <h1>tools.js Unit Tests</h1>
+  <div id="output"></div>
+
+  <!-- Minimal stubs so tools.js can load without errors -->
+  <script>
+    window.SG = {
+      router: { register: function(){}, registerCleanup: function(){} },
+      api: {
+        get: function(){ return Promise.resolve([]); },
+        post: function(){ return Promise.resolve({}); },
+        put: function(){ return Promise.resolve({}); },
+        del: function(){ return Promise.resolve(null); },
+        BASE: '/admin/api'
+      },
+      toast: {
+        success: function(){},
+        error: function(){},
+        warning: function(){},
+        info: function(){}
+      },
+      modal: {
+        open: function(){ return document.createElement('div'); },
+        close: function(){},
+        confirm: function(){}
+      },
+      icon: function(name, size) { return '<svg></svg>'; },
+      tools: {}
+    };
+  </script>
+  <script src="tools.js"></script>
+  <script>
+    var passed = 0, failed = 0, output = document.getElementById('output');
+
+    function suite(name) {
+      var el = document.createElement('div');
+      el.className = 'suite';
+      el.textContent = '--- ' + name + ' ---';
+      output.appendChild(el);
+    }
+
+    function assert(description, actual, expected) {
+      var el = document.createElement('div');
+      var ok = JSON.stringify(actual) === JSON.stringify(expected);
+      if (ok) {
+        passed++;
+        el.className = 'pass';
+        el.textContent = '  PASS  ' + description;
+      } else {
+        failed++;
+        el.className = 'fail';
+        el.textContent = '  FAIL  ' + description + ' -- expected: ' + JSON.stringify(expected) + ', got: ' + JSON.stringify(actual);
+      }
+      output.appendChild(el);
+    }
+
+    var fns = SG.tools._internal;
+
+    // ======================================================================
+    // globToRegex
+    // ======================================================================
+    suite('globToRegex');
+
+    assert('exact name unchanged',
+      fns.globToRegex('file_read'), 'file_read');
+
+    assert('trailing star converts to .*',
+      fns.globToRegex('read_*'), 'read_.*');
+
+    assert('leading star converts to .*',
+      fns.globToRegex('*_write'), '.*_write');
+
+    assert('middle star converts to .*',
+      fns.globToRegex('fs_*_read'), 'fs_.*_read');
+
+    assert('escapes dots',
+      fns.globToRegex('file.read'), 'file\\.read');
+
+    assert('escapes parentheses',
+      fns.globToRegex('fn(x)'), 'fn\\(x\\)');
+
+    assert('multiple stars',
+      fns.globToRegex('*_*'), '.*_.*');
+
+    assert('escapes square brackets',
+      fns.globToRegex('arr[0]'), 'arr\\[0\\]');
+
+    // ======================================================================
+    // buildCELFromSimple
+    // ======================================================================
+    suite('buildCELFromSimple');
+
+    assert('exact tool name produces == expression',
+      fns.buildCELFromSimple('file_read'), 'tool_name == "file_read"');
+
+    assert('glob pattern produces matches() with regex',
+      fns.buildCELFromSimple('read_*'), 'tool_name.matches("^read_.*$")');
+
+    assert('empty string produces true',
+      fns.buildCELFromSimple(''), 'true');
+
+    assert('null/undefined produces true',
+      fns.buildCELFromSimple(null), 'true');
+
+    assert('dot in name still uses == (not glob)',
+      fns.buildCELFromSimple('file.read'), 'tool_name == "file.read"');
+
+    assert('multiple stars produce matches()',
+      fns.buildCELFromSimple('*_*'), 'tool_name.matches("^.*_.*$")');
+
+    // ======================================================================
+    // parseCELToSimple
+    // ======================================================================
+    suite('parseCELToSimple');
+
+    assert('parses exact match tool_name == "xxx"',
+      fns.parseCELToSimple('tool_name == "file_read"'),
+      { appliesTo: 'file_read' });
+
+    assert('parses "true" to empty appliesTo',
+      fns.parseCELToSimple('true'),
+      { appliesTo: '' });
+
+    assert('parses empty string to empty appliesTo',
+      fns.parseCELToSimple(''),
+      { appliesTo: '' });
+
+    assert('parses null to empty appliesTo',
+      fns.parseCELToSimple(null),
+      { appliesTo: '' });
+
+    assert('returns null for complex expression',
+      fns.parseCELToSimple('tool_name.startsWith("x") && user_roles.exists(r, r == "admin")'),
+      null);
+
+    assert('parses matches() pattern back to glob',
+      fns.parseCELToSimple('tool_name.matches("^read_.*$")'),
+      { appliesTo: 'read_*' });
+
+    // ======================================================================
+    // Round-trip: buildCELFromSimple -> parseCELToSimple
+    // ======================================================================
+    suite('Round-trip (build -> parse)');
+
+    var roundTrips = ['file_read', 'read_*', '*_write', '', 'fs_*_read'];
+    for (var i = 0; i < roundTrips.length; i++) {
+      (function(input) {
+        var cel = fns.buildCELFromSimple(input);
+        var parsed = fns.parseCELToSimple(cel);
+        assert('round-trip "' + input + '" -> CEL -> simple',
+          parsed ? parsed.appliesTo : null,
+          input);
+      })(roundTrips[i]);
+    }
+
+    // ======================================================================
+    // Summary
+    // ======================================================================
+    var summary = document.createElement('div');
+    summary.className = 'summary';
+    summary.innerHTML = '<strong>Results:</strong> <span class="pass">' + passed + ' passed</span>, <span class="' + (failed > 0 ? 'fail' : 'pass') + '">' + failed + ' failed</span> of ' + (passed + failed) + ' total';
+    output.appendChild(summary);
+
+    // Set document title to reflect results
+    document.title = (failed > 0 ? 'FAIL' : 'PASS') + ' - tools.js Unit Tests (' + passed + '/' + (passed + failed) + ')';
+  </script>
+</body>
+</html>

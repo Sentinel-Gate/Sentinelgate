@@ -1,0 +1,34 @@
+# Build artifacts
+/sentinel-gate
+*.exe
+
+# IDE and tools
+.vscode/
+*.swp
+
+# Test artifacts
+coverage.out
+*.test
+
+# Runtime state
+state.json
+state.json.bak
+state.json.lock
+
+# macOS
+**/.DS_Store
+
+# Environment files
+.env
+.env.*
+
+# Runtime config (generated)
+sentinel-gate.yaml
+
+# Dependencies
+**/__pycache__/
+**/node_modules/
+
+# Go workspace
+go.work
+go.work.sum
