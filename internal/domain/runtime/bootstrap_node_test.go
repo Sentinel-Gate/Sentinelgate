@@ -3,6 +3,7 @@ package runtime
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -88,10 +89,12 @@ func TestWriteNodeBootstrap_FilePermissions(t *testing.T) {
 		t.Fatalf("stat: %v", err)
 	}
 
-	// Check file mode (0644 on unix-like systems).
-	mode := info.Mode().Perm()
-	if mode != 0644 {
-		t.Errorf("file permissions = %o, want 0644", mode)
+	// Check file mode (0644 on unix-like systems) — skip on Windows.
+	if runtime.GOOS != "windows" {
+		mode := info.Mode().Perm()
+		if mode != 0644 {
+			t.Errorf("file permissions = %o, want 0644", mode)
+		}
 	}
 }
 

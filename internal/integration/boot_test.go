@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 
 	"github.com/Sentinel-Gate/Sentinelgate/internal/adapter/outbound/memory"
@@ -86,10 +87,12 @@ func TestBootEmptyState(t *testing.T) {
 		t.Fatalf("state.json not created: %v", err)
 	}
 
-	// Verify file permissions are 0600.
-	perm := info.Mode().Perm()
-	if perm != 0600 {
-		t.Errorf("state.json permissions = %o, want 0600", perm)
+	// Verify file permissions are 0600 — skip on Windows where Unix permissions are unsupported.
+	if runtime.GOOS != "windows" {
+		perm := info.Mode().Perm()
+		if perm != 0600 {
+			t.Errorf("state.json permissions = %o, want 0600", perm)
+		}
 	}
 
 	// Load again and verify content persisted correctly.

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log/slog"
 	"os"
+	"runtime"
 	"sync"
 	"time"
 )
@@ -42,11 +43,14 @@ func (s *FileStateStore) Load() (*AppState, error) {
 	}
 
 	// SECU-07: Check file permissions and warn if too open.
-	if info, statErr := os.Stat(s.path); statErr == nil {
-		mode := info.Mode().Perm()
-		if mode&0077 != 0 { // group or other has access
-			s.logger.Warn("state.json has too-open permissions, should be 0600",
-				"path", s.path, "current_mode", fmt.Sprintf("%04o", mode))
+	// Skip on Windows where Unix file permission bits are not supported.
+	if runtime.GOOS != "windows" {
+		if info, statErr := os.Stat(s.path); statErr == nil {
+			mode := info.Mode().Perm()
+			if mode&0077 != 0 { // group or other has access
+				s.logger.Warn("state.json has too-open permissions, should be 0600",
+					"path", s.path, "current_mode", fmt.Sprintf("%04o", mode))
+			}
 		}
 	}
 

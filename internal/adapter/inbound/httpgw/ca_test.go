@@ -8,6 +8,7 @@ import (
 	"net"
 	"os"
 	"path/filepath"
+	"runtime"
 	"testing"
 )
 
@@ -41,13 +42,15 @@ func TestNewCAManager_GeneratesNew(t *testing.T) {
 		t.Fatalf("key file not created: %s", cfg.KeyFile)
 	}
 
-	// Verify key file permissions (0600)
-	info, err := os.Stat(cfg.KeyFile)
-	if err != nil {
-		t.Fatalf("stat key file: %v", err)
-	}
-	if perm := info.Mode().Perm(); perm != 0600 {
-		t.Errorf("key file perm = %o, want 0600", perm)
+	// Verify key file permissions (0600) — skip on Windows where Unix permissions are unsupported.
+	if runtime.GOOS != "windows" {
+		info, err := os.Stat(cfg.KeyFile)
+		if err != nil {
+			t.Fatalf("stat key file: %v", err)
+		}
+		if perm := info.Mode().Perm(); perm != 0600 {
+			t.Errorf("key file perm = %o, want 0600", perm)
+		}
 	}
 
 	// Verify the cert is a CA

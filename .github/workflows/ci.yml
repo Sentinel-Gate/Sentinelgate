@@ -25,19 +25,22 @@ jobs:
           args: --timeout=5m
 
   test:
-    name: Test
-    runs-on: ubuntu-latest
+    name: Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
         with:
           go-version-file: 'go.mod'
-      - name: Run tests with race detector and coverage
-        run: |
-          go test -race -coverprofile=coverage.out -covermode=atomic ./...
+      - name: Run tests with race detector
+        run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
       - name: Check coverage on critical packages
+        if: matrix.os == 'ubuntu-latest'
         run: |
-          # Extract coverage for critical packages and enforce 80% threshold
+          # Extract coverage for critical packages and enforce 65% threshold
           CRITICAL_PKGS=(
             "github.com/Sentinel-Gate/Sentinelgate/internal/adapter/outbound/state"
             "github.com/Sentinel-Gate/Sentinelgate/internal/domain/proxy"
@@ -70,6 +73,7 @@ jobs:
             exit 1
           fi
       - name: Upload coverage report
+        if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
@@ -89,6 +93,8 @@ jobs:
             goarch: amd64
           - goos: darwin
             goarch: arm64
+          - goos: windows
+            goarch: amd64
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5

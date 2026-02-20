@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -259,9 +260,11 @@ func TestSave_SetsFilePermissions0600(t *testing.T) {
 		t.Fatalf("failed to stat file: %v", err)
 	}
 
-	perm := info.Mode().Perm()
-	if perm != 0600 {
-		t.Errorf("expected permissions 0600, got %04o", perm)
+	if runtime.GOOS != "windows" {
+		perm := info.Mode().Perm()
+		if perm != 0600 {
+			t.Errorf("expected permissions 0600, got %04o", perm)
+		}
 	}
 }
 
@@ -565,6 +568,10 @@ func TestSaveAndLoad_RoundTrip(t *testing.T) {
 // ---------------------------------------------------------------------------
 
 func TestLoad_TooOpenPermissions_WarnsButSucceeds(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Unix file permissions not supported on Windows")
+	}
+
 	dir := t.TempDir()
 	path := filepath.Join(dir, "state.json")
 
@@ -616,6 +623,7 @@ func TestLoad_CorrectPermissions_NoWarning(t *testing.T) {
 	}
 
 	// No permission warning should be logged.
+	// On Windows, permission checks are skipped entirely, so no warning is expected either.
 	logOutput := buf.String()
 	if strings.Contains(logOutput, "too-open permissions") {
 		t.Errorf("unexpected warning for correctly permissioned file, got: %q", logOutput)
@@ -623,6 +631,10 @@ func TestLoad_CorrectPermissions_NoWarning(t *testing.T) {
 }
 
 func TestSave_ExplicitChmod0600(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Unix file permissions not supported on Windows")
+	}
+
 	dir := t.TempDir()
 	path := filepath.Join(dir, "state.json")
 	s := NewFileStateStore(path, testLogger())

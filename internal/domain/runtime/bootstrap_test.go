@@ -126,11 +126,15 @@ func TestBuildEnvVars_AllVarsPresent(t *testing.T) {
 		t.Errorf("PYTHONPATH = %q, should contain /tmp/sg-test/python", pythonPath)
 	}
 
-	// Verify NODE_OPTIONS contains --require hook.
+	// Verify NODE_OPTIONS contains --require hook (always uses forward slashes).
 	nodeOpts := varMap["NODE_OPTIONS"]
 	expectedHook := "--require /tmp/sg-test/node/sentinelgate-hook.js"
 	if !strings.Contains(nodeOpts, expectedHook) {
 		t.Errorf("NODE_OPTIONS = %q, should contain %q", nodeOpts, expectedHook)
+	}
+	// Verify no backslashes in hook path (cross-platform consistency).
+	if strings.Contains(nodeOpts, "\\") {
+		t.Errorf("NODE_OPTIONS should use forward slashes, got %q", nodeOpts)
 	}
 }
 
@@ -209,7 +213,7 @@ func TestBuildEnvVars_NodeOptionsAppend(t *testing.T) {
 	if !strings.HasPrefix(nodeOpts, "--max-old-space-size=4096") {
 		t.Errorf("NODE_OPTIONS should start with existing options, got %q", nodeOpts)
 	}
-	// Hook should be appended.
+	// Hook should be appended (always uses forward slashes).
 	if !strings.Contains(nodeOpts, "--require /tmp/sg-test/node/sentinelgate-hook.js") {
 		t.Errorf("NODE_OPTIONS should contain --require hook, got %q", nodeOpts)
 	}

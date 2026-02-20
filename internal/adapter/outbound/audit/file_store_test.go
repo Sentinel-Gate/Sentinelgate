@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"sync"
 	"testing"
@@ -57,9 +58,11 @@ func TestNewFileAuditStore_CreatesDirectory(t *testing.T) {
 	if !info.IsDir() {
 		t.Fatal("Expected directory, got file")
 	}
-	// Check permissions (0700)
-	if perm := info.Mode().Perm(); perm != 0700 {
-		t.Errorf("Directory permissions = %o, want 0700", perm)
+	// Check permissions (0700) — skip on Windows where Unix permissions are unsupported.
+	if runtime.GOOS != "windows" {
+		if perm := info.Mode().Perm(); perm != 0700 {
+			t.Errorf("Directory permissions = %o, want 0700", perm)
+		}
 	}
 }
 
@@ -742,8 +745,10 @@ func TestFileAuditStore_FilePermissions(t *testing.T) {
 		t.Fatalf("Stat error: %v", err)
 	}
 
-	if perm := info.Mode().Perm(); perm != 0600 {
-		t.Errorf("File permissions = %o, want 0600", perm)
+	if runtime.GOOS != "windows" {
+		if perm := info.Mode().Perm(); perm != 0600 {
+			t.Errorf("File permissions = %o, want 0600", perm)
+		}
 	}
 }
 

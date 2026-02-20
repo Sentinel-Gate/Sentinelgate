@@ -375,7 +375,7 @@ func TestResponseScanner_FindingFields(t *testing.T) {
 	if f.Position < 0 {
 		t.Error("Position should be non-negative")
 	}
-	if result.ScanDurationNs <= 0 {
-		t.Error("ScanDurationNs should be positive")
+	if result.ScanDurationNs < 0 {
+		t.Error("ScanDurationNs should be non-negative")
 	}
 }

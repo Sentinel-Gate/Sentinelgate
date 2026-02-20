@@ -36,15 +36,15 @@ func TestIsGeminiCLI(t *testing.T) {
 }
 
 func TestSetupGeminiHooks_NewFile(t *testing.T) {
-	// Not parallel: uses t.Setenv.
+	t.Parallel()
 
-	// Use a temp dir as fake home.
+	// Use a temp dir as fake home via HomeDir override.
 	tmpHome := t.TempDir()
-	t.Setenv("HOME", tmpHome)
 
 	cfg := GeminiHookConfig{
 		ServerAddr: "http://localhost:8080",
 		APIKey:     "test-key-123",
+		HomeDir:    tmpHome,
 	}
 
 	setup, err := SetupGeminiHooks(cfg)
@@ -119,10 +119,9 @@ func TestSetupGeminiHooks_NewFile(t *testing.T) {
 }
 
 func TestSetupGeminiHooks_PreservesExisting(t *testing.T) {
-	// Not parallel: uses t.Setenv.
+	t.Parallel()
 
 	tmpHome := t.TempDir()
-	t.Setenv("HOME", tmpHome)
 
 	// Create existing settings with user config.
 	geminiDir := filepath.Join(tmpHome, ".gemini")
@@ -148,6 +147,7 @@ func TestSetupGeminiHooks_PreservesExisting(t *testing.T) {
 
 	cfg := GeminiHookConfig{
 		ServerAddr: "http://localhost:9090",
+		HomeDir:    tmpHome,
 	}
 
 	setup, err := SetupGeminiHooks(cfg)
@@ -187,10 +187,9 @@ func TestSetupGeminiHooks_PreservesExisting(t *testing.T) {
 }
 
 func TestCleanupGeminiHooks_RestoresOriginal(t *testing.T) {
-	// Not parallel: uses t.Setenv.
+	t.Parallel()
 
 	tmpHome := t.TempDir()
-	t.Setenv("HOME", tmpHome)
 
 	// Create original file.
 	geminiDir := filepath.Join(tmpHome, ".gemini")
@@ -200,7 +199,7 @@ func TestCleanupGeminiHooks_RestoresOriginal(t *testing.T) {
 	os.WriteFile(settingsPath, original, 0644)
 
 	// Setup hooks (modifies file).
-	setup, err := SetupGeminiHooks(GeminiHookConfig{ServerAddr: "http://localhost:8080"})
+	setup, err := SetupGeminiHooks(GeminiHookConfig{ServerAddr: "http://localhost:8080", HomeDir: tmpHome})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -217,13 +216,12 @@ func TestCleanupGeminiHooks_RestoresOriginal(t *testing.T) {
 }
 
 func TestCleanupGeminiHooks_RemovesNewFile(t *testing.T) {
-	// Not parallel: uses t.Setenv.
+	t.Parallel()
 
 	tmpHome := t.TempDir()
-	t.Setenv("HOME", tmpHome)
 
 	// Setup hooks (creates new file).
-	setup, err := SetupGeminiHooks(GeminiHookConfig{ServerAddr: "http://localhost:8080"})
+	setup, err := SetupGeminiHooks(GeminiHookConfig{ServerAddr: "http://localhost:8080", HomeDir: tmpHome})
 	if err != nil {
 		t.Fatal(err)
 	}

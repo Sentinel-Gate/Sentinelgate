@@ -29,10 +29,12 @@ func validateAuditOutput(fl validator.FieldLevel) bool {
 		return true
 	}
 
-	// "file://<path>" requires an absolute path
+	// "file://<path>" requires an absolute path.
+	// Accept both native absolute paths and URI-style paths starting with "/"
+	// (e.g., file:///var/log/audit.log) for cross-platform compatibility.
 	if strings.HasPrefix(output, "file://") {
 		path := strings.TrimPrefix(output, "file://")
-		return path != "" && filepath.IsAbs(path)
+		return path != "" && (filepath.IsAbs(path) || strings.HasPrefix(path, "/"))
 	}
 
 	return false

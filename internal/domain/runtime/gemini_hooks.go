@@ -16,6 +16,10 @@ type GeminiHookConfig struct {
 
 	// APIKey is the runtime API key for authenticating MCP requests.
 	APIKey string
+
+	// HomeDir overrides the home directory (for testing). If empty,
+	// os.UserHomeDir() is used.
+	HomeDir string
 }
 
 // GeminiHookSetup holds the state needed to clean up Gemini CLI hooks on exit.
@@ -71,9 +75,13 @@ func IsGeminiCLI(command string) bool {
 // First instance: saves original settings as backup, writes MCP config + tool exclusions.
 // Subsequent instances: increments refcount only (config already in place).
 func SetupGeminiHooks(cfg GeminiHookConfig) (*GeminiHookSetup, error) {
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get home dir: %w", err)
+	homeDir := cfg.HomeDir
+	if homeDir == "" {
+		var err error
+		homeDir, err = os.UserHomeDir()
+		if err != nil {
+			return nil, fmt.Errorf("failed to get home dir: %w", err)
+		}
 	}
 
 	geminiDir := filepath.Join(homeDir, ".gemini")

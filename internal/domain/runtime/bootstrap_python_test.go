@@ -3,6 +3,7 @@ package runtime
 import (
 	"os"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -25,10 +26,12 @@ func TestWritePythonBootstrap_CreatesFile(t *testing.T) {
 		t.Error("sitecustomize.py is empty")
 	}
 
-	// Verify file permissions are 0644.
-	perm := info.Mode().Perm()
-	if perm != 0644 {
-		t.Errorf("file permissions = %o, want 0644", perm)
+	// Verify file permissions are 0644 — skip on Windows where Unix permissions are unsupported.
+	if runtime.GOOS != "windows" {
+		perm := info.Mode().Perm()
+		if perm != 0644 {
+			t.Errorf("file permissions = %o, want 0644", perm)
+		}
 	}
 }
 

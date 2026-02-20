@@ -170,7 +170,8 @@ func BuildEnvVars(env *BootstrapEnv, cfg BootstrapConfig) []string {
 	// NODE_OPTIONS: append --require hook to existing NODE_OPTIONS.
 	// Skip for Bun binaries (e.g. Claude Code) that use PreToolUse hooks instead.
 	if !cfg.SkipNodeOptions {
-		hookPath := filepath.Join(env.NodeDir, "sentinelgate-hook.js")
+		// Use forward slashes for Node.js compatibility on all platforms.
+		hookPath := filepath.ToSlash(filepath.Join(env.NodeDir, "sentinelgate-hook.js"))
 		nodeOpts := fmt.Sprintf("--require %s", hookPath)
 		if existing := os.Getenv("NODE_OPTIONS"); existing != "" {
 			nodeOpts = existing + " " + nodeOpts
