@@ -36,6 +36,7 @@ jobs:
         with:
           go-version-file: 'go.mod'
       - name: Run tests with race detector
+        shell: bash
         run: go test -race -coverprofile=coverage.out -covermode=atomic ./...
       - name: Check coverage on critical packages
         if: matrix.os == 'ubuntu-latest'
