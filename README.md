@@ -73,6 +73,7 @@ curl -sSfL https://raw.githubusercontent.com/Sentinel-Gate/Sentinelgate/main/ins
 | Linux (x86_64) | `sentinel-gate_linux_amd64.tar.gz` |
 | Linux (ARM64) | `sentinel-gate_linux_arm64.tar.gz` |
 | Windows (x86_64) | `sentinel-gate_windows_amd64.zip` |
+| Windows (ARM64) | `sentinel-gate_windows_arm64.zip` |
 
 **macOS / Linux:**
 ```bash
