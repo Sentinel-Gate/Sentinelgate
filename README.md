@@ -59,7 +59,11 @@ For defense-in-depth against adversarial code, combine SentinelGate with contain
 curl -sSfL https://raw.githubusercontent.com/Sentinel-Gate/Sentinelgate/main/install.sh | sh
 ```
 
-> **Windows:** download the `.zip` from [GitHub Releases](https://github.com/Sentinel-Gate/Sentinelgate/releases) — see details below.
+**Install** (Windows PowerShell):
+
+```powershell
+irm https://raw.githubusercontent.com/Sentinel-Gate/Sentinelgate/main/install.ps1 | iex
+```
 
 <details>
 <summary>Manual download or build from source</summary>
