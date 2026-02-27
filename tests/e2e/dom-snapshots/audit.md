@@ -1,0 +1,85 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e564]:
+      - generic [ref=e565]:
+        - heading "Audit Log" [level=1] [ref=e566]
+        - generic [ref=e567]:
+          - generic [ref=e570]: Live
+          - button "Export CSV" [ref=e571] [cursor=pointer]:
+            - img [ref=e572]
+            - generic [ref=e575]: Export CSV
+      - generic [ref=e577]:
+        - generic [ref=e578]:
+          - generic [ref=e579]: Decision
+          - combobox [ref=e580] [cursor=pointer]:
+            - option "All" [selected]
+            - option "Allow"
+            - option "Deny"
+        - generic [ref=e581]:
+          - generic [ref=e582]: Protocol
+          - combobox [ref=e583] [cursor=pointer]:
+            - option "All" [selected]
+            - option "MCP"
+            - option "HTTP"
+            - option "WebSocket"
+        - generic [ref=e584]:
+          - generic [ref=e585]: Tool
+          - textbox "Filter by tool name" [ref=e586]
+        - generic [ref=e587]:
+          - generic [ref=e588]: User
+          - textbox "Filter by user/identity" [ref=e589]
+        - generic [ref=e590]:
+          - generic [ref=e591]: Period
+          - combobox [ref=e592] [cursor=pointer]:
+            - option "Last 24h" [selected]
+            - option "Today"
+            - option "Last hour"
+            - option "Last 7d"
+            - option "Custom"
+        - generic [ref=e593]:
+          - button "Apply" [ref=e594] [cursor=pointer]
+          - button "Clear" [ref=e595] [cursor=pointer]
+      - generic [ref=e597]:
+        - img [ref=e599]
+        - paragraph [ref=e601]: Waiting for audit events…
+      - generic [ref=e602]: 0 entries

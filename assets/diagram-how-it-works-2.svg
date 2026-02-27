@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 330" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="820" y2="330" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1a1d2e"/>
+      <stop offset="100%" stop-color="#151825"/>
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000" flood-opacity="0.3"/>
+    </filter>
+    <marker id="arrowGray" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <polygon points="0,1 8,4 0,7" fill="#64748b"/>
+    </marker>
+    <marker id="arrowRed" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <polygon points="0,1 8,4 0,7" fill="#ef4444"/>
+    </marker>
+    <marker id="arrowTeal" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <polygon points="0,1 8,4 0,7" fill="#2dd4a8"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="820" height="330" rx="12" fill="url(#bgGrad)"/>
+  <rect width="820" height="330" rx="12" stroke="#2a2d42" stroke-width="1" fill="none"/>
+
+  <!-- ======================== ROW 1: Three main boxes ======================== -->
+
+  <!-- AI Agent box -->
+  <rect x="40" y="40" width="180" height="64" rx="8" fill="#222640" stroke="#3a3d55" stroke-width="1" filter="url(#shadow)"/>
+  <text x="130" y="66" text-anchor="middle" fill="#e2e8f0" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="15" font-weight="600">AI Agent</text>
+  <text x="130" y="82" text-anchor="middle" fill="#64748b" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">Claude · Gemini · Codex</text>
+  <text x="130" y="96" text-anchor="middle" fill="#64748b" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">Python · Node</text>
+
+  <!-- SentinelGate box -->
+  <rect x="310" y="40" width="200" height="64" rx="8" fill="#222640" stroke="#2dd4a8" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="410" y="68" text-anchor="middle" fill="#2dd4a8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="15" font-weight="700">SentinelGate</text>
+  <text x="410" y="88" text-anchor="middle" fill="#64748b" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">Policy Engine</text>
+
+  <!-- System box with lock overlay -->
+  <rect x="600" y="40" width="180" height="64" rx="8" fill="#222640" stroke="#3a3d55" stroke-width="1" filter="url(#shadow)"/>
+  <text x="690" y="68" text-anchor="middle" fill="#e2e8f0" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="15" font-weight="600">System</text>
+  <text x="690" y="88" text-anchor="middle" fill="#64748b" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">MCP Server</text>
+  <!-- Never reached — tight under System box -->
+  <text x="690" y="122" text-anchor="middle" fill="#475569" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-style="italic">🔒 Never reached</text>
+
+  <!-- ======================== Arrow: Agent → SentinelGate ======================== -->
+  <line x1="220" y1="72" x2="305" y2="72" stroke="#64748b" stroke-width="1.5" marker-end="url(#arrowGray)"/>
+  <!-- Action label — prominent -->
+  <rect x="222" y="46" width="82" height="22" rx="4" fill="#2a2d42" stroke="#64748b" stroke-width="1"/>
+  <text x="263" y="61" text-anchor="middle" fill="#e2e8f0" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">delete_file</text>
+
+  <!-- ======================== Blocked X between SentinelGate and System ======================== -->
+  <line x1="510" y1="72" x2="544" y2="72" stroke="#3a3d55" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <line x1="566" y1="72" x2="596" y2="72" stroke="#3a3d55" stroke-width="1.5" stroke-dasharray="4,4"/>
+  <circle cx="555" cy="72" r="12" fill="#2a1215" stroke="#ef4444" stroke-width="1.5"/>
+  <line x1="549" y1="66" x2="561" y2="78" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+  <line x1="561" y1="66" x2="549" y2="78" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- ======================== MIDDLE: Interceptor chain ======================== -->
+  <rect x="250" y="140" width="320" height="96" rx="8" fill="#1e2235" stroke="#2a2d42" stroke-width="1"/>
+  <text x="410" y="160" text-anchor="middle" fill="#94a3b8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="10" font-weight="600" letter-spacing="1.5">INTERCEPTOR CHAIN</text>
+
+  <!-- Chain steps -->
+  <rect x="264" y="170" width="66" height="26" rx="5" fill="#222640" stroke="#3a3d55" stroke-width="1"/>
+  <text x="297" y="187" text-anchor="middle" fill="#cbd5e1" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">Validate</text>
+
+  <text x="340" y="188" text-anchor="middle" fill="#3a3d55" font-size="13">→</text>
+
+  <rect x="350" y="170" width="50" height="26" rx="5" fill="#222640" stroke="#3a3d55" stroke-width="1"/>
+  <text x="375" y="187" text-anchor="middle" fill="#cbd5e1" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">Auth</text>
+
+  <text x="410" y="188" text-anchor="middle" fill="#3a3d55" font-size="13">→</text>
+
+  <rect x="420" y="170" width="56" height="26" rx="5" fill="#222640" stroke="#3a3d55" stroke-width="1"/>
+  <text x="448" y="187" text-anchor="middle" fill="#cbd5e1" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11">Quota</text>
+
+  <text x="486" y="188" text-anchor="middle" fill="#3a3d55" font-size="13">→</text>
+
+  <!-- Policy — highlighted as the deciding step -->
+  <rect x="496" y="170" width="60" height="26" rx="5" fill="#0d2922" stroke="#2dd4a8" stroke-width="1.5"/>
+  <text x="526" y="187" text-anchor="middle" fill="#2dd4a8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="700">Policy</text>
+
+  <!-- Deny result inside chain box -->
+  <rect x="340" y="204" width="140" height="24" rx="5" fill="#2a1215" stroke="#ef4444" stroke-width="1"/>
+  <text x="410" y="220" text-anchor="middle" fill="#ef4444" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="600">DENY — block-deletes</text>
+
+  <!-- ======================== Return arrow: clean L-shape back to Agent ======================== -->
+  <!-- Down from chain -->
+  <line x1="250" y1="228" x2="250" y2="260" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <!-- Horizontal back to agent column -->
+  <line x1="250" y1="260" x2="130" y2="260" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <!-- Up to agent box -->
+  <line x1="130" y1="260" x2="130" y2="110" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrowRed)"/>
+  <!-- Access denied label on horizontal segment -->
+  <rect x="148" y="248" width="96" height="24" rx="4" fill="#2a1215" stroke="#ef4444" stroke-width="1"/>
+  <text x="196" y="264" text-anchor="middle" fill="#ef4444" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="500">Access denied</text>
+
+  <!-- ======================== Audit trail ======================== -->
+  <line x1="410" y1="236" x2="410" y2="264" stroke="#2dd4a8" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arrowTeal)"/>
+  <rect x="348" y="268" width="124" height="28" rx="6" fill="#0d2922" stroke="#2dd4a8" stroke-width="1"/>
+  <text x="410" y="286" text-anchor="middle" fill="#2dd4a8" font-family="-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif" font-size="11" font-weight="500">✓ Audit logged</text>
+
+</svg>

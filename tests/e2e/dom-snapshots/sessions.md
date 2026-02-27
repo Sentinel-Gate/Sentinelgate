@@ -1,0 +1,101 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e603]:
+      - heading "Sessions" [level=1] [ref=e605]
+      - generic [ref=e606]:
+        - generic [ref=e607] [cursor=pointer]:
+          - generic [ref=e608]:
+            - img [ref=e609]
+            - text: Recording Configuration
+          - img [ref=e613]
+        - generic [ref=e651]:
+          - generic [ref=e652]:
+            - checkbox "Enable recording" [ref=e653]
+            - generic [ref=e654]: Enable recording
+          - generic [ref=e655]:
+            - checkbox "Record request/response payloads" [ref=e656]
+            - generic [ref=e657]: Record request/response payloads
+          - generic [ref=e658]: "Warning: payloads may contain sensitive data. Use redact patterns below."
+          - generic [ref=e659]:
+            - generic [ref=e660]:
+              - generic [ref=e661]: Retention Days
+              - spinbutton "Retention Days" [ref=e662]: "30"
+            - generic [ref=e663]:
+              - generic [ref=e664]: Storage Directory
+              - textbox "Storage Directory" [ref=e665]: sg-recordings
+            - generic [ref=e666]:
+              - generic [ref=e667]: Redact Patterns (comma-separated)
+              - textbox "Redact Patterns (comma-separated)" [ref=e668]:
+                - /placeholder: password,secret,token
+          - button "Save Configuration" [ref=e670] [cursor=pointer]
+      - generic [ref=e615]:
+        - generic [ref=e616]:
+          - generic [ref=e617]: Identity
+          - textbox "Filter by identity" [ref=e618]
+        - generic [ref=e619]:
+          - generic [ref=e620]: From
+          - textbox [ref=e621]
+        - generic [ref=e622]:
+          - generic [ref=e623]: To
+          - textbox [ref=e624]
+        - generic [ref=e626]:
+          - checkbox "Has denies" [ref=e627]
+          - generic [ref=e628]: Has denies
+        - generic [ref=e629]:
+          - button "Apply" [ref=e630] [cursor=pointer]
+          - button "Clear" [ref=e631] [cursor=pointer]
+      - table [ref=e633]:
+        - rowgroup [ref=e634]:
+          - row "Session ID Identity Started Duration Events Denies Actions" [ref=e635]:
+            - columnheader "Session ID" [ref=e636]
+            - columnheader "Identity" [ref=e637]
+            - columnheader "Started" [ref=e638]
+            - columnheader "Duration" [ref=e639]
+            - columnheader "Events" [ref=e640]
+            - columnheader "Denies" [ref=e641]
+            - columnheader "Actions" [ref=e642]
+        - rowgroup [ref=e643]:
+          - row "No recordings found. Enable recording in the configuration above." [ref=e644]:
+            - cell "No recordings found. Enable recording in the configuration above." [ref=e645]:
+              - img [ref=e647]
+              - paragraph [ref=e650]: No recordings found. Enable recording in the configuration above.

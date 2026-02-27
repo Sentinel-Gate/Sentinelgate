@@ -1,0 +1,118 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e471]:
+      - generic [ref=e473]:
+        - heading "Access" [level=1] [ref=e474]
+        - paragraph [ref=e475]: Manage API keys for MCP client authentication
+      - generic [ref=e477]:
+        - generic [ref=e478]:
+          - generic [ref=e479]:
+            - img [ref=e480]
+            - text: API Keys
+          - button "Create Key" [ref=e482] [cursor=pointer]:
+            - img [ref=e483]
+            - text: Create Key
+        - table [ref=e527]:
+          - rowgroup [ref=e528]:
+            - row "Name Identity Created Status Actions" [ref=e529]:
+              - columnheader "Name" [ref=e530]
+              - columnheader "Identity" [ref=e531]
+              - columnheader "Created" [ref=e532]
+              - columnheader "Status" [ref=e533]
+              - columnheader "Actions" [ref=e534]
+          - rowgroup [ref=e535]:
+            - row "e2e-test-key e2e-tester 26 Feb 2026 18:23 Active Revoke" [ref=e536]:
+              - cell "e2e-test-key" [ref=e537]
+              - cell "e2e-tester" [ref=e538]
+              - cell "26 Feb 2026 18:23" [ref=e539]
+              - cell "Active" [ref=e540]:
+                - generic [ref=e541]: Active
+              - cell "Revoke" [ref=e542]:
+                - button "Revoke" [ref=e543] [cursor=pointer]
+      - generic [ref=e489]:
+        - generic [ref=e490] [cursor=pointer]:
+          - generic [ref=e491]:
+            - generic [ref=e492]: Identities
+            - img [ref=e494]
+          - button "Add Identity" [ref=e496]:
+            - img [ref=e497]
+            - text: Add Identity
+        - table [ref=e544]:
+          - rowgroup [ref=e545]:
+            - row "Name Roles Created Actions" [ref=e546]:
+              - columnheader "Name" [ref=e547]
+              - columnheader "Roles" [ref=e548]
+              - columnheader "Created" [ref=e549]
+              - columnheader "Actions" [ref=e550]
+          - rowgroup [ref=e551]:
+            - row "e2e-tester admin user 26 Feb 2026 18:23 Edit Configure Quota Delete" [ref=e552]:
+              - cell "e2e-tester" [ref=e553]
+              - cell "admin user" [ref=e554]:
+                - generic [ref=e555]:
+                  - generic [ref=e556]: admin
+                  - generic [ref=e557]: user
+              - cell "26 Feb 2026 18:23" [ref=e558]
+              - cell "Edit Configure Quota Delete" [ref=e559]:
+                - generic [ref=e560]:
+                  - button "Edit" [ref=e561] [cursor=pointer]
+                  - button "Configure Quota" [ref=e562] [cursor=pointer]
+                  - button "Delete" [ref=e563] [cursor=pointer]
+      - generic [ref=e503]:
+        - generic [ref=e505]:
+          - img [ref=e506]
+          - text: Connect Your Agent
+        - generic [ref=e509]:
+          - paragraph [ref=e510]: Choose your agent or client below and copy the configuration snippet. Replace <your-api-key> with a key from the section above.
+          - generic [ref=e511]:
+            - button "Claude Code" [ref=e512] [cursor=pointer]
+            - button "Gemini CLI" [ref=e513] [cursor=pointer]
+            - button "Codex CLI" [ref=e514] [cursor=pointer]
+            - button "Cursor / IDE" [ref=e515] [cursor=pointer]
+            - button "Python" [ref=e516] [cursor=pointer]
+            - button "Node.js" [ref=e517] [cursor=pointer]
+            - button "cURL" [ref=e518] [cursor=pointer]
+          - generic [ref=e520]:
+            - generic [ref=e521]: "# Option 1: CLI (recommended) claude mcp add sentinelgate --transport http http://localhost:8080/mcp \\ -H \"Authorization: Bearer <your-api-key>\" # Option 2: ~/.claude/settings.json { \"mcpServers\": { \"sentinelgate\": { \"url\": \"http://localhost:8080/mcp\", \"headers\": { \"Authorization\": \"Bearer <your-api-key>\" } } } }"
+            - button "Copy" [ref=e522] [cursor=pointer]:
+              - img [ref=e523]
+              - generic [ref=e526]: Copy

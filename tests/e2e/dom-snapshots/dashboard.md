@@ -1,0 +1,110 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e46]:
+      - generic [ref=e47]:
+        - heading "Dashboard" [level=1] [ref=e48]
+        - generic [ref=e51]: Live
+      - generic [ref=e52]:
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: Upstreams
+            - generic [ref=e56]: "2"
+          - img [ref=e58]
+        - generic [ref=e61]:
+          - generic [ref=e62]:
+            - generic [ref=e63]: Tools
+            - generic [ref=e64]: "23"
+          - img [ref=e66]
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - generic [ref=e70]: Allowed
+            - generic [ref=e71]: "0"
+          - img [ref=e73]
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - generic [ref=e78]: Denied
+            - generic [ref=e79]: "0"
+          - img [ref=e81]
+        - generic [ref=e85]:
+          - generic [ref=e86]:
+            - generic [ref=e87]: Rate Limited
+            - generic [ref=e88]: "0"
+          - img [ref=e90]
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - generic [ref=e95]:
+            - img [ref=e96]
+            - text: Protocol Distribution
+          - generic [ref=e151]: No traffic recorded yet
+        - generic [ref=e101]:
+          - generic [ref=e103]: Framework Activity
+          - generic [ref=e152]: No framework activity detected
+      - generic [ref=e106]:
+        - generic [ref=e108]:
+          - img [ref=e109]
+          - text: Active Sessions
+          - generic [ref=e111]: "0"
+        - generic [ref=e153]: No active sessions
+      - generic [ref=e114]:
+        - generic [ref=e115]:
+          - generic [ref=e117]:
+            - img [ref=e118]
+            - text: Upstreams
+          - generic [ref=e154]:
+            - generic [ref=e155] [cursor=pointer]:
+              - generic [ref=e156]:
+                - generic [ref=e157]: filesystem
+                - generic [ref=e158]: 14 tools
+              - generic [ref=e161]: Connected
+            - generic [ref=e162] [cursor=pointer]:
+              - generic [ref=e163]:
+                - generic [ref=e164]: memory
+                - generic [ref=e165]: 9 tools
+              - generic [ref=e168]: Connected
+        - generic [ref=e137]:
+          - generic [ref=e139]:
+            - img [ref=e140]
+            - text: Recent Activity
+          - generic [ref=e143]:
+            - img [ref=e145]
+            - paragraph [ref=e147]: Waiting for activity…

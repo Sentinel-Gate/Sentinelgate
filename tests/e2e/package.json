@@ -1,0 +1,23 @@
+{
+  "name": "sentinelgate-e2e",
+  "version": "1.0.0",
+  "private": true,
+  "description": "End-to-end tests for SentinelGate MCP proxy",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test ui/",
+    "test:mcp": "npx playwright test mcp/",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "report": "npx playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.0",
+    "@types/node": "^25.3.1",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server-filesystem": "^2026.1.14",
+    "@modelcontextprotocol/server-memory": "^2026.1.26"
+  }
+}

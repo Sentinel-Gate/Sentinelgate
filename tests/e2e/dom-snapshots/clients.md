@@ -1,0 +1,54 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e860]:
+      - generic [ref=e861]:
+        - heading "Connected Clients" [level=1] [ref=e862]
+        - paragraph [ref=e863]: Active MCP sessions connected to this server
+      - generic [ref=e864]:
+        - generic [ref=e874]:
+          - generic [ref=e875]: "0"
+          - generic [ref=e876]: Active Sessions
+        - generic [ref=e877]:
+          - generic [ref=e878]: "0"
+          - generic [ref=e879]: Total Calls
+      - paragraph [ref=e881]: No MCP clients connected. Configure an agent to connect to this server.

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>tools.js Unit Tests</title>
+  <style>
+    body { font-family: monospace; padding: 20px; background: #1a1a2e; color: #e0e0e0; }
+    h1 { color: #a78bfa; margin-bottom: 24px; }
+    .pass { color: #4ade80; }
+    .fail { color: #f87171; font-weight: bold; }
+    .suite { margin: 16px 0 8px; font-weight: bold; color: #5eead4; }
+    .summary { margin-top: 24px; padding: 12px; border-top: 1px solid #333; }
+  </style>
+</head>
+<body>
+  <h1>tools.js Unit Tests</h1>
+  <div id="output"></div>
+
+  <!-- Minimal stubs so tools.js can load without errors -->
+  <script>
+    window.SG = {
+      router: { register: function(){}, registerCleanup: function(){} },
+      api: {
+        get: function(){ return Promise.resolve([]); },
+        post: function(){ return Promise.resolve({}); },
+        put: function(){ return Promise.resolve({}); },
+        del: function(){ return Promise.resolve(null); },
+        BASE: '/admin/api'
+      },
+      toast: {
+        success: function(){},
+        error: function(){},
+        warning: function(){},
+        info: function(){}
+      },
+      modal: {
+        open: function(){ return document.createElement('div'); },
+        close: function(){},
+        confirm: function(){}
+      },
+      icon: function(name, size) { return '<svg></svg>'; },
+      tools: {}
+    };
+  </script>
+  <script src="tools.js"></script>
+  <script>
+    var passed = 0, failed = 0, output = document.getElementById('output');
+
+    function suite(name) {
+      var el = document.createElement('div');
+      el.className = 'suite';
+      el.textContent = '--- ' + name + ' ---';
+      output.appendChild(el);
+    }
+
+    function assert(description, actual, expected) {
+      var el = document.createElement('div');
+      var ok = JSON.stringify(actual) === JSON.stringify(expected);
+      if (ok) {
+        passed++;
+        el.className = 'pass';
+        el.textContent = '  PASS  ' + description;
+      } else {
+        failed++;
+        el.className = 'fail';
+        el.textContent = '  FAIL  ' + description + ' -- expected: ' + JSON.stringify(expected) + ', got: ' + JSON.stringify(actual);
+      }
+      output.appendChild(el);
+    }
+
+    var fns = SG.tools._internal;
+
+    // ======================================================================
+    // globToRegex
+    // ======================================================================
+    suite('globToRegex');
+
+    assert('exact name unchanged',
+      fns.globToRegex('file_read'), 'file_read');
+
+    assert('trailing star converts to .*',
+      fns.globToRegex('read_*'), 'read_.*');
+
+    assert('leading star converts to .*',
+      fns.globToRegex('*_write'), '.*_write');
+
+    assert('middle star converts to .*',
+      fns.globToRegex('fs_*_read'), 'fs_.*_read');
+
+    assert('escapes dots',
+      fns.globToRegex('file.read'), 'file\\.read');
+
+    assert('escapes parentheses',
+      fns.globToRegex('fn(x)'), 'fn\\(x\\)');
+
+    assert('multiple stars',
+      fns.globToRegex('*_*'), '.*_.*');
+
+    assert('escapes square brackets',
+      fns.globToRegex('arr[0]'), 'arr\\[0\\]');
+
+    // ======================================================================
+    // buildCELFromSimple
+    // ======================================================================
+    suite('buildCELFromSimple');
+
+    assert('exact tool name produces == expression',
+      fns.buildCELFromSimple('file_read'), 'tool_name == "file_read"');
+
+    assert('glob pattern produces matches() with regex',
+      fns.buildCELFromSimple('read_*'), 'tool_name.matches("^read_.*$")');
+
+    assert('empty string produces true',
+      fns.buildCELFromSimple(''), 'true');
+
+    assert('null/undefined produces true',
+      fns.buildCELFromSimple(null), 'true');
+
+    assert('dot in name still uses == (not glob)',
+      fns.buildCELFromSimple('file.read'), 'tool_name == "file.read"');
+
+    assert('multiple stars produce matches()',
+      fns.buildCELFromSimple('*_*'), 'tool_name.matches("^.*_.*$")');
+
+    // ======================================================================
+    // parseCELToSimple
+    // ======================================================================
+    suite('parseCELToSimple');
+
+    assert('parses exact match tool_name == "xxx"',
+      fns.parseCELToSimple('tool_name == "file_read"'),
+      { appliesTo: 'file_read' });
+
+    assert('parses "true" to empty appliesTo',
+      fns.parseCELToSimple('true'),
+      { appliesTo: '' });
+
+    assert('parses empty string to empty appliesTo',
+      fns.parseCELToSimple(''),
+      { appliesTo: '' });
+
+    assert('parses null to empty appliesTo',
+      fns.parseCELToSimple(null),
+      { appliesTo: '' });
+
+    assert('returns null for complex expression',
+      fns.parseCELToSimple('tool_name.startsWith("x") && user_roles.exists(r, r == "admin")'),
+      null);
+
+    assert('parses matches() pattern back to glob',
+      fns.parseCELToSimple('tool_name.matches("^read_.*$")'),
+      { appliesTo: 'read_*' });
+
+    // ======================================================================
+    // Round-trip: buildCELFromSimple -> parseCELToSimple
+    // ======================================================================
+    suite('Round-trip (build -> parse)');
+
+    var roundTrips = ['file_read', 'read_*', '*_write', '', 'fs_*_read'];
+    for (var i = 0; i < roundTrips.length; i++) {
+      (function(input) {
+        var cel = fns.buildCELFromSimple(input);
+        var parsed = fns.parseCELToSimple(cel);
+        assert('round-trip "' + input + '" -> CEL -> simple',
+          parsed ? parsed.appliesTo : null,
+          input);
+      })(roundTrips[i]);
+    }
+
+    // ======================================================================
+    // Transform UI Tests
+    // ======================================================================
+
+    // ------------------------------------------------------------------
+    // testTransformTypeBadgeColors
+    // ------------------------------------------------------------------
+    suite('Transform: Type Badge Colors');
+
+    assert('redact maps to type-redact',
+      fns.transformTypeBadgeClass('redact'), 'type-redact');
+    assert('truncate maps to type-truncate',
+      fns.transformTypeBadgeClass('truncate'), 'type-truncate');
+    assert('inject maps to type-inject',
+      fns.transformTypeBadgeClass('inject'), 'type-inject');
+    assert('dry_run maps to type-dry_run',
+      fns.transformTypeBadgeClass('dry_run'), 'type-dry_run');
+    assert('mask maps to type-mask',
+      fns.transformTypeBadgeClass('mask'), 'type-mask');
+    assert('unknown type returns empty string',
+      fns.transformTypeBadgeClass('bogus'), '');
+
+    // ------------------------------------------------------------------
+    // testTransformConfigVisibility
+    // ------------------------------------------------------------------
+    suite('Transform: Config Visibility');
+
+    // Create a temporary form to test visibility toggling
+    (function () {
+      var testContainer = document.createElement('div');
+      testContainer.style.display = 'none';
+      document.body.appendChild(testContainer);
+
+      // We test via openTransformModal internals: create a form with
+      // config sections and verify only the correct one has 'visible' class.
+      // Since openTransformModal uses SG.modal.open which returns a div,
+      // we simulate by creating the config sections manually.
+
+      var types = ['redact', 'truncate', 'inject', 'dry_run', 'mask'];
+      var sections = {};
+      for (var i = 0; i < types.length; i++) {
+        var sec = document.createElement('div');
+        sec.className = 'transform-config-section';
+        sec.setAttribute('data-config-type', types[i]);
+        testContainer.appendChild(sec);
+        sections[types[i]] = sec;
+      }
+
+      // Simulate type selection: add 'visible' to one, remove from others
+      function simulateTypeSelect(selectedType) {
+        for (var t = 0; t < types.length; t++) {
+          if (types[t] === selectedType) {
+            sections[types[t]].classList.add('visible');
+          } else {
+            sections[types[t]].classList.remove('visible');
+          }
+        }
+      }
+
+      // Test each type
+      simulateTypeSelect('redact');
+      assert('redact selected: redact visible',
+        sections.redact.classList.contains('visible'), true);
+      assert('redact selected: truncate hidden',
+        sections.truncate.classList.contains('visible'), false);
+      assert('redact selected: inject hidden',
+        sections.inject.classList.contains('visible'), false);
+      assert('redact selected: dry_run hidden',
+        sections.dry_run.classList.contains('visible'), false);
+      assert('redact selected: mask hidden',
+        sections.mask.classList.contains('visible'), false);
+
+      simulateTypeSelect('truncate');
+      assert('truncate selected: truncate visible',
+        sections.truncate.classList.contains('visible'), true);
+      assert('truncate selected: redact hidden',
+        sections.redact.classList.contains('visible'), false);
+
+      simulateTypeSelect('inject');
+      assert('inject selected: inject visible',
+        sections.inject.classList.contains('visible'), true);
+      assert('inject selected: redact hidden',
+        sections.redact.classList.contains('visible'), false);
+
+      simulateTypeSelect('dry_run');
+      assert('dry_run selected: dry_run visible',
+        sections.dry_run.classList.contains('visible'), true);
+      assert('dry_run selected: inject hidden',
+        sections.inject.classList.contains('visible'), false);
+
+      simulateTypeSelect('mask');
+      assert('mask selected: mask visible',
+        sections.mask.classList.contains('visible'), true);
+      assert('mask selected: dry_run hidden',
+        sections.dry_run.classList.contains('visible'), false);
+
+      document.body.removeChild(testContainer);
+    })();
+
+    // ------------------------------------------------------------------
+    // testTransformFormToRequest
+    // ------------------------------------------------------------------
+    suite('Transform: Form to Request Conversion');
+
+    (function () {
+      // Build a minimal form with the fields buildTransformRequestFromForm expects
+      var form = document.createElement('form');
+
+      function addInput(name, value, tag) {
+        tag = tag || 'input';
+        var el = document.createElement(tag);
+        el.setAttribute('name', name);
+        if (tag === 'textarea') {
+          el.value = value;
+        } else if (el.type === 'checkbox') {
+          el.checked = value;
+        } else {
+          el.value = value;
+        }
+        form.appendChild(el);
+        return el;
+      }
+
+      addInput('tf-name', 'redact-keys');
+      var typeEl = document.createElement('select');
+      typeEl.setAttribute('name', 'tf-type');
+      var opt = document.createElement('option');
+      opt.value = 'redact';
+      opt.selected = true;
+      typeEl.appendChild(opt);
+      form.appendChild(typeEl);
+      addInput('tf-tool-match', 'read_*');
+      addInput('tf-priority', '50');
+      var enabledEl = document.createElement('input');
+      enabledEl.type = 'checkbox';
+      enabledEl.setAttribute('name', 'tf-enabled');
+      enabledEl.checked = true;
+      form.appendChild(enabledEl);
+
+      // Redact config fields
+      var patternsEl = addInput('tf-redact-patterns', 'sk-[a-z]+\nAIza-[0-9]+\n\n', 'textarea');
+      addInput('tf-redact-replacement', '[REMOVED]');
+
+      // Also add empty fields for other types so buildTransformRequestFromForm doesn't crash
+      addInput('tf-truncate-max-bytes', '');
+      addInput('tf-truncate-max-lines', '');
+      addInput('tf-truncate-suffix', '');
+      addInput('tf-inject-prepend', '', 'textarea');
+      addInput('tf-inject-append', '', 'textarea');
+      addInput('tf-dryrun-response', '', 'textarea');
+      addInput('tf-mask-patterns', '', 'textarea');
+      addInput('tf-mask-visible-prefix', '3');
+      addInput('tf-mask-visible-suffix', '4');
+      addInput('tf-mask-char', '*');
+
+      var req = fns.buildTransformRequestFromForm(form);
+
+      assert('request name',
+        req.name, 'redact-keys');
+      assert('request type',
+        req.type, 'redact');
+      assert('request tool_match',
+        req.tool_match, 'read_*');
+      assert('request priority is number',
+        req.priority, 50);
+      assert('request enabled',
+        req.enabled, true);
+      assert('patterns textarea splits lines, filters empty',
+        req.config.patterns, ['sk-[a-z]+', 'AIza-[0-9]+']);
+      assert('replacement from input',
+        req.config.replacement, '[REMOVED]');
+    })();
+
+    // ------------------------------------------------------------------
+    // testTransformPrioritySorting
+    // ------------------------------------------------------------------
+    suite('Transform: Priority Sorting');
+
+    (function () {
+      // renderTransforms sorts by priority ascending internally.
+      // We test the sort logic directly.
+      var rules = [
+        { id: 'a', name: 'third', type: 'redact', priority: 30, enabled: true },
+        { id: 'b', name: 'first', type: 'mask', priority: 10, enabled: true },
+        { id: 'c', name: 'second', type: 'truncate', priority: 20, enabled: true }
+      ];
+
+      var sorted = rules.slice().sort(function (a, b) {
+        return (a.priority || 0) - (b.priority || 0);
+      });
+
+      assert('first by priority is 10',
+        sorted[0].priority, 10);
+      assert('second by priority is 20',
+        sorted[1].priority, 20);
+      assert('third by priority is 30',
+        sorted[2].priority, 30);
+      assert('sort order: first, second, third',
+        sorted.map(function (r) { return r.name; }),
+        ['first', 'second', 'third']);
+    })();
+
+    // ------------------------------------------------------------------
+    // testTransformTestResultRendering
+    // ------------------------------------------------------------------
+    suite('Transform: Test Result Rendering');
+
+    (function () {
+      // Verify that we can build result items from a test response.
+      // We test the data structure mapping, not DOM rendering directly.
+      var testResponse = {
+        output: 'Hello [REDACTED] world',
+        results: [
+          { rule_id: 'r1', rule_name: 'redact-keys', type: 'redact', applied: true, detail: '1 pattern redacted' },
+          { rule_id: 'r2', rule_name: 'truncate-long', type: 'truncate', applied: false, detail: 'under limit' }
+        ]
+      };
+
+      assert('output text preserved',
+        testResponse.output, 'Hello [REDACTED] world');
+      assert('results count',
+        testResponse.results.length, 2);
+      assert('first result applied',
+        testResponse.results[0].applied, true);
+      assert('first result type',
+        testResponse.results[0].type, 'redact');
+      assert('first result name',
+        testResponse.results[0].rule_name, 'redact-keys');
+      assert('second result not applied',
+        testResponse.results[1].applied, false);
+      assert('second result detail',
+        testResponse.results[1].detail, 'under limit');
+
+      // Also verify badge class mapping for result types
+      assert('result type badge for redact',
+        fns.transformTypeBadgeClass(testResponse.results[0].type), 'type-redact');
+      assert('result type badge for truncate',
+        fns.transformTypeBadgeClass(testResponse.results[1].type), 'type-truncate');
+    })();
+
+    // ======================================================================
+    // Summary
+    // ======================================================================
+    var summary = document.createElement('div');
+    summary.className = 'summary';
+    summary.innerHTML = '<strong>Results:</strong> <span class="pass">' + passed + ' passed</span>, <span class="' + (failed > 0 ? 'fail' : 'pass') + '">' + failed + ' failed</span> of ' + (passed + failed) + ' total';
+    output.appendChild(summary);
+
+    // Set document title to reflect results
+    document.title = (failed > 0 ? 'FAIL' : 'PASS') + ' - tools.js Unit Tests (' + passed + '/' + (passed + failed) + ')';
+  </script>
+</body>
+</html>

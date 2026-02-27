@@ -1,0 +1,82 @@
+# Sentinel Gate OSS - Example Configuration
+# Copy this file to sentinel-gate.yaml and customize for your environment.
+#
+# For Docker deployment:
+#   volumes:
+#     - ./sentinel-gate.yaml:/etc/sentinel-gate/sentinel-gate.yaml:ro
+
+# Server configuration
+server:
+  # Default: "127.0.0.1:8080" (localhost only)
+  # Use "0.0.0.0:8080" or ":8080" to listen on all interfaces (e.g., Docker)
+  http_addr: "127.0.0.1:8080"
+  # Session timeout - how long before sessions expire
+  # session_timeout: "30m"  # default: 30 minutes
+
+# Upstream MCP server connection
+upstream:
+  # HTTP mode: Connect to remote MCP server
+  http: "http://host.docker.internal:3000/mcp"
+
+  # Stdio mode (alternative): Spawn local MCP server
+  # Uncomment these and comment out http above to use stdio mode:
+  # command: "npx"
+  # args: ["@modelcontextprotocol/server-filesystem", "/tmp"]
+
+  # HTTP request timeout (only for HTTP mode)
+  # http_timeout: "30s"  # default: 30 seconds
+
+# Authentication - API keys mapped to identities
+auth:
+  identities:
+    - id: "service-account"
+      name: "Docker Service Account"
+      roles: ["user"]
+    - id: "admin-user"
+      name: "Administrator"
+      roles: ["admin", "user"]
+  api_keys:
+    # Generate hash with: sentinel-gate hash-key "your-api-key"
+    - key_hash: "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      identity_id: "service-account"
+
+# Audit logging
+audit:
+  output: "stdout"
+  # Alternative: Write to file (must be absolute path)
+  # output: "file:///var/log/sentinel-gate/audit.log"
+  # channel_size: 1000       # Buffer size (default: 1000)
+  # batch_size: 100          # Records per batch (default: 100)
+  # flush_interval: "1s"     # Flush frequency (default: 1s)
+  # send_timeout: "100ms"    # Timeout before drop (default: 100ms)
+  # warning_threshold: 80    # Channel depth warning % (default: 80)
+
+# Rate limiting (optional)
+rate_limit:
+  enabled: true
+  ip_rate: 100      # Requests per minute per IP
+  user_rate: 1000   # Requests per minute per authenticated user
+  # cleanup_interval: "5m"  # How often to clean expired entries (default: 5m)
+  # max_ttl: "1h"           # Max age of entries before removal (default: 1h)
+
+# Policy rules - evaluated in order, first match wins
+policies:
+  - name: "default"
+    rules:
+      # Allow read-only tools
+      - name: "allow-read-tools"
+        condition: 'tool_name.startsWith("read_") || tool_name.startsWith("list_")'
+        action: "allow"
+
+      # Allow admin users full access
+      - name: "allow-admin-all"
+        condition: '"admin" in user_roles'
+        action: "allow"
+
+      # Deny everything else (catch-all)
+      - name: "deny-all"
+        condition: "true"
+        action: "deny"
+
+# Development mode - disables authentication (NEVER use in production)
+dev_mode: false

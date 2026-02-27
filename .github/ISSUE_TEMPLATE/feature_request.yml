@@ -1,0 +1,55 @@
+name: Feature Request
+description: Suggest an improvement for SentinelGate
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What problem does this feature solve?
+      placeholder: I'm always frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How should it work? Describe the desired behavior.
+      placeholder: It would be great if...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Other approaches you've considered
+      placeholder: I also thought about...
+    validations:
+      required: false
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      description: Which part of SentinelGate does this affect?
+      options:
+        - Core Proxy
+        - Admin UI
+        - Policy Engine
+        - CLI
+        - Docker
+        - Other
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: search
+    attributes:
+      label: Due Diligence
+      options:
+        - label: I have searched existing issues for duplicates
+          required: true
+        - label: "This is NOT a Pro/Enterprise feature (SSO, SIEM, multi-tenant, etc.)"
+          required: false

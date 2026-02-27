@@ -1,0 +1,96 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e169]:
+      - generic [ref=e170]:
+        - heading "Getting Started" [level=1] [ref=e171]
+        - paragraph [ref=e172]: Choose how you use AI agents to get the right setup
+      - generic [ref=e173]:
+        - heading "Features" [level=2] [ref=e175]
+        - generic [ref=e176]:
+          - link "Policy Templates Pre-built security policies for common scenarios — apply with one click." [ref=e177] [cursor=pointer]:
+            - /url: "#/tools"
+            - img [ref=e179]
+            - generic [ref=e181]:
+              - generic [ref=e182]: Policy Templates
+              - paragraph [ref=e183]: Pre-built security policies for common scenarios — apply with one click.
+            - img [ref=e185]
+          - link "Response Transforms Redact, mask, or modify tool responses before they reach the client." [ref=e187] [cursor=pointer]:
+            - /url: "#/tools?tab=transforms"
+            - img [ref=e189]
+            - generic [ref=e191]:
+              - generic [ref=e192]: Response Transforms
+              - paragraph [ref=e193]: Redact, mask, or modify tool responses before they reach the client.
+            - img [ref=e195]
+          - link "Budget & Quota Set per-identity usage limits with configurable actions on breach." [ref=e197] [cursor=pointer]:
+            - /url: "#/access"
+            - img [ref=e199]
+            - generic [ref=e202]:
+              - generic [ref=e203]: Budget & Quota
+              - paragraph [ref=e204]: Set per-identity usage limits with configurable actions on breach.
+            - img [ref=e206]
+          - link "Session Recording Record and replay full MCP sessions for audit and debugging." [ref=e208] [cursor=pointer]:
+            - /url: "#/sessions"
+            - img [ref=e210]
+            - generic [ref=e213]:
+              - generic [ref=e214]: Session Recording
+              - paragraph [ref=e215]: Record and replay full MCP sessions for audit and debugging.
+            - img [ref=e217]
+      - generic [ref=e219]:
+        - generic [ref=e221] [cursor=pointer]:
+          - img [ref=e223]
+          - generic [ref=e226]:
+            - generic [ref=e227]: MCP Proxy
+            - paragraph [ref=e228]: I use MCP-compatible tools (Claude Desktop, Cursor, etc.)
+          - img [ref=e230]
+        - generic [ref=e233] [cursor=pointer]:
+          - img [ref=e235]
+          - generic [ref=e238]:
+            - generic [ref=e239]: HTTP Gateway
+            - paragraph [ref=e240]: Control outbound HTTP requests from your agents
+          - img [ref=e242]
+        - generic [ref=e245] [cursor=pointer]:
+          - img [ref=e247]
+          - generic [ref=e250]:
+            - generic [ref=e251]: MCP Client SDK
+            - paragraph [ref=e252]: Connect to SentinelGate programmatically using MCP client libraries
+          - img [ref=e254]

@@ -1,0 +1,202 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e256]:
+      - generic [ref=e257]:
+        - heading "Tools & Rules" [level=1] [ref=e258]
+        - generic [ref=e259]:
+          - button "Use Template" [ref=e260] [cursor=pointer]:
+            - img [ref=e261]
+            - text: Use Template
+          - button "Add Upstream" [ref=e264] [cursor=pointer]:
+            - img [ref=e265]
+            - text: Add Upstream
+      - generic [ref=e266]:
+        - generic [ref=e282]:
+          - button "Tools & Rules" [ref=e283] [cursor=pointer]
+          - button "Transforms" [ref=e284] [cursor=pointer]
+          - button "Policy Test" [ref=e285] [cursor=pointer]
+        - generic [ref=e286]:
+          - generic [ref=e287]:
+            - button "All 23" [ref=e288] [cursor=pointer]:
+              - text: All
+              - generic [ref=e289]: "23"
+            - button "filesystem 14" [ref=e290] [cursor=pointer]:
+              - text: filesystem
+              - generic [ref=e291]: "14"
+            - button "memory 9" [ref=e292] [cursor=pointer]:
+              - text: memory
+              - generic [ref=e293]: "9"
+          - generic [ref=e294]:
+            - generic [ref=e295]:
+              - generic [ref=e296] [cursor=pointer]:
+                - img [ref=e298]
+                - generic [ref=e300]: filesystem
+                - generic [ref=e301]: 14 tools
+                - generic [ref=e303]:
+                  - button "Refresh tools" [ref=e304]:
+                    - img [ref=e305]
+                  - button "Upstream settings" [ref=e310]:
+                    - img [ref=e311]
+              - generic [ref=e313]:
+                - generic [ref=e314]:
+                  - generic "Click to edit rule for this tool" [ref=e315] [cursor=pointer]: create_directory
+                  - generic [ref=e316]: Create a new directory or ensure a directory exists. Can create multiple nested …
+                  - generic "Click to edit rule" [ref=e318] [cursor=pointer]: Allow
+                - generic [ref=e319]:
+                  - generic "Click to edit rule for this tool" [ref=e320] [cursor=pointer]: directory_tree
+                  - generic [ref=e321]: Get a recursive tree view of files and directories as a JSON structure. Each ent…
+                  - generic "Click to edit rule" [ref=e323] [cursor=pointer]: Allow
+                - generic [ref=e324]:
+                  - generic "Click to edit rule for this tool" [ref=e325] [cursor=pointer]: edit_file
+                  - generic [ref=e326]: Make line-based edits to a text file. Each edit replaces exact line sequences wi…
+                  - generic "Click to edit rule" [ref=e328] [cursor=pointer]: Allow
+                - generic [ref=e329]:
+                  - generic "Click to edit rule for this tool" [ref=e330] [cursor=pointer]: get_file_info
+                  - generic [ref=e331]: Retrieve detailed metadata about a file or directory. Returns comprehensive info…
+                  - generic "Click to edit rule" [ref=e333] [cursor=pointer]: Allow
+                - generic [ref=e334]:
+                  - generic "Click to edit rule for this tool" [ref=e335] [cursor=pointer]: list_allowed_directories
+                  - generic [ref=e336]: Returns the list of directories that this server is allowed to access. Subdirect…
+                  - generic "Click to edit rule" [ref=e338] [cursor=pointer]: Allow
+                - generic [ref=e339]:
+                  - generic "Click to edit rule for this tool" [ref=e340] [cursor=pointer]: list_directory
+                  - generic [ref=e341]: Get a detailed listing of all files and directories in a specified path. Results…
+                  - generic "Click to edit rule" [ref=e343] [cursor=pointer]: Allow
+                - generic [ref=e344]:
+                  - generic "Click to edit rule for this tool" [ref=e345] [cursor=pointer]: list_directory_with_sizes
+                  - generic [ref=e346]: Get a detailed listing of all files and directories in a specified path, includi…
+                  - generic "Click to edit rule" [ref=e348] [cursor=pointer]: Allow
+                - generic [ref=e349]:
+                  - generic "Click to edit rule for this tool" [ref=e350] [cursor=pointer]: move_file
+                  - generic [ref=e351]: Move or rename files and directories. Can move files between directories and ren…
+                  - generic "Click to edit rule" [ref=e353] [cursor=pointer]: Allow
+                - generic [ref=e354]:
+                  - generic "Click to edit rule for this tool" [ref=e355] [cursor=pointer]: read_file
+                  - generic [ref=e356]: "Read the complete contents of a file as text. DEPRECATED: Use read_text_file ins…"
+                  - generic "Click to edit rule" [ref=e358] [cursor=pointer]: Allow
+                - generic [ref=e359]:
+                  - generic "Click to edit rule for this tool" [ref=e360] [cursor=pointer]: read_media_file
+                  - generic [ref=e361]: Read an image or audio file. Returns the base64 encoded data and MIME type. Only…
+                  - generic "Click to edit rule" [ref=e363] [cursor=pointer]: Allow
+                - generic [ref=e364]:
+                  - generic "Click to edit rule for this tool" [ref=e365] [cursor=pointer]: read_multiple_files
+                  - generic [ref=e366]: Read the contents of multiple files simultaneously. This is more efficient than …
+                  - generic "Click to edit rule" [ref=e368] [cursor=pointer]: Allow
+                - generic [ref=e369]:
+                  - generic "Click to edit rule for this tool" [ref=e370] [cursor=pointer]: read_text_file
+                  - generic [ref=e371]: Read the complete contents of a file from the file system as text. Handles vario…
+                  - generic "Click to edit rule" [ref=e373] [cursor=pointer]: Allow
+                - generic [ref=e374]:
+                  - generic "Click to edit rule for this tool" [ref=e375] [cursor=pointer]: search_files
+                  - generic [ref=e376]: Recursively search for files and directories matching a pattern. The patterns sh…
+                  - generic "Click to edit rule" [ref=e378] [cursor=pointer]: Allow
+                - generic [ref=e379]:
+                  - generic "Click to edit rule for this tool" [ref=e380] [cursor=pointer]: write_file
+                  - generic [ref=e381]: Create a new file or completely overwrite an existing file with new content. Use…
+                  - generic "Click to edit rule" [ref=e383] [cursor=pointer]: Allow
+            - generic [ref=e384]:
+              - generic [ref=e385] [cursor=pointer]:
+                - img [ref=e387]
+                - generic [ref=e389]: memory
+                - generic [ref=e390]: 9 tools
+                - generic [ref=e392]:
+                  - button "Refresh tools" [ref=e393]:
+                    - img [ref=e394]
+                  - button "Upstream settings" [ref=e399]:
+                    - img [ref=e400]
+              - generic [ref=e402]:
+                - generic [ref=e403]:
+                  - generic "Click to edit rule for this tool" [ref=e404] [cursor=pointer]: add_observations
+                  - generic [ref=e405]: Add new observations to existing entities in the knowledge graph
+                  - generic "Click to edit rule" [ref=e407] [cursor=pointer]: Allow
+                - generic [ref=e408]:
+                  - generic "Click to edit rule for this tool" [ref=e409] [cursor=pointer]: create_entities
+                  - generic [ref=e410]: Create multiple new entities in the knowledge graph
+                  - generic "Click to edit rule" [ref=e412] [cursor=pointer]: Allow
+                - generic [ref=e413]:
+                  - generic "Click to edit rule for this tool" [ref=e414] [cursor=pointer]: create_relations
+                  - generic [ref=e415]: Create multiple new relations between entities in the knowledge graph. Relations…
+                  - generic "Click to edit rule" [ref=e417] [cursor=pointer]: Allow
+                - generic [ref=e418]:
+                  - generic "Click to edit rule for this tool" [ref=e419] [cursor=pointer]: delete_entities
+                  - generic [ref=e420]: Delete multiple entities and their associated relations from the knowledge graph
+                  - generic "Click to edit rule" [ref=e422] [cursor=pointer]: Allow
+                - generic [ref=e423]:
+                  - generic "Click to edit rule for this tool" [ref=e424] [cursor=pointer]: delete_observations
+                  - generic [ref=e425]: Delete specific observations from entities in the knowledge graph
+                  - generic "Click to edit rule" [ref=e427] [cursor=pointer]: Allow
+                - generic [ref=e428]:
+                  - generic "Click to edit rule for this tool" [ref=e429] [cursor=pointer]: delete_relations
+                  - generic [ref=e430]: Delete multiple relations from the knowledge graph
+                  - generic "Click to edit rule" [ref=e432] [cursor=pointer]: Allow
+                - generic [ref=e433]:
+                  - generic "Click to edit rule for this tool" [ref=e434] [cursor=pointer]: open_nodes
+                  - generic [ref=e435]: Open specific nodes in the knowledge graph by their names
+                  - generic "Click to edit rule" [ref=e437] [cursor=pointer]: Allow
+                - generic [ref=e438]:
+                  - generic "Click to edit rule for this tool" [ref=e439] [cursor=pointer]: read_graph
+                  - generic [ref=e440]: Read the entire knowledge graph
+                  - generic "Click to edit rule" [ref=e442] [cursor=pointer]: Allow
+                - generic [ref=e443]:
+                  - generic "Click to edit rule for this tool" [ref=e444] [cursor=pointer]: search_nodes
+                  - generic [ref=e445]: Search for nodes in the knowledge graph based on a query
+                  - generic "Click to edit rule" [ref=e447] [cursor=pointer]: Allow
+          - generic [ref=e448]:
+            - generic [ref=e449]:
+              - heading "Policy Rules" [level=2] [ref=e450]:
+                - img [ref=e451]
+                - text: Policy Rules
+              - button "Add Rule" [ref=e453] [cursor=pointer]:
+                - img [ref=e454]
+                - text: Add Rule
+            - generic [ref=e456]:
+              - generic [ref=e457]: "100"
+              - generic [ref=e458]:
+                - generic [ref=e459]: allow-all
+                - generic [ref=e460]: "*"
+              - generic [ref=e461]: Allow
+              - generic [ref=e462]:
+                - button "Edit rule" [ref=e463] [cursor=pointer]:
+                  - img [ref=e464]
+                - button "Delete rule" [ref=e466] [cursor=pointer]:
+                  - img [ref=e467]

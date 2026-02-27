@@ -1,0 +1,30 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+
+  settings:
+    errcheck:
+      exclude-functions:
+        - (io.Closer).Close
+        - (net.Conn).Close
+        - (*os.File).Close
+        - (net.Listener).Close
+        - (*net/http.Response).Body.Close
+        - (*crypto/tls.Conn).Close
+        - (net.Conn).SetReadDeadline
+        - fmt.Fprint
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - os.Remove
+        - (*encoding/json.Encoder).Encode
+
+  exclusions:
+    rules:
+      - linters: [errcheck]
+        path: _test\.go

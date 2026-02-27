@@ -1,0 +1,203 @@
+- generic [ref=e2]:
+  - complementary [ref=e3]:
+    - generic [ref=e4]:
+      - img [ref=e5]
+      - generic [ref=e7]: SentinelGate
+    - navigation [ref=e8]:
+      - link "Getting Started" [ref=e9] [cursor=pointer]:
+        - /url: "#/getting-started"
+        - img [ref=e10]
+        - text: Getting Started
+      - link "Dashboard" [ref=e13] [cursor=pointer]:
+        - /url: "#/dashboard"
+        - img [ref=e14]
+        - text: Dashboard
+      - link "Tools & Rules" [ref=e19] [cursor=pointer]:
+        - /url: "#/tools"
+        - img [ref=e20]
+        - text: Tools & Rules
+      - link "Access" [ref=e22] [cursor=pointer]:
+        - /url: "#/access"
+        - img [ref=e23]
+        - text: Access
+      - link "Audit Log" [ref=e25] [cursor=pointer]:
+        - /url: "#/audit"
+        - img [ref=e26]
+        - text: Audit Log
+      - link "Sessions" [ref=e29] [cursor=pointer]:
+        - /url: "#/sessions"
+        - img [ref=e30]
+        - text: Sessions
+      - link "Security" [ref=e33] [cursor=pointer]:
+        - /url: "#/security"
+        - img [ref=e34]
+        - text: Security
+      - link "Clients" [ref=e36] [cursor=pointer]:
+        - /url: "#/agents"
+        - img [ref=e37]
+        - text: Clients
+    - generic [ref=e42]:
+      - generic [ref=e43]: v1.1.0
+      - generic [ref=e44]: 2 upstreams
+  - main [ref=e45]:
+    - generic [ref=e678]:
+      - generic [ref=e679]:
+        - heading "Security" [level=1] [ref=e680]
+        - paragraph [ref=e681]: Configure response content scanning, outbound control, and security features.
+      - generic [ref=e683]: "Content Scanning: Disabled"
+    - generic [ref=e684]:
+      - heading "Content Scanning" [level=3] [ref=e686]:
+        - img [ref=e687]
+        - text: Content Scanning
+      - generic [ref=e689]:
+        - paragraph [ref=e690]: Scan tool responses for prompt injection patterns before forwarding to agents. Detects system prompt overrides, role hijacking, instruction injection, and other attack patterns.
+        - generic [ref=e691]:
+          - generic [ref=e692]:
+            - generic [ref=e693]: Enable Content Scanning
+            - generic [ref=e694]: When enabled, all tool responses are scanned for prompt injection patterns.
+          - generic [ref=e695]:
+            - checkbox
+        - generic [ref=e697]:
+          - generic [ref=e698]: Scanning Mode
+          - generic [ref=e699] [cursor=pointer]:
+            - radio "Monitor Log detections without blocking responses. Recommended for initial deployment to evaluate detection accuracy before enforcing." [checked] [ref=e700]
+            - generic [ref=e701]:
+              - generic [ref=e702]: Monitor
+              - generic [ref=e703]: Log detections without blocking responses. Recommended for initial deployment to evaluate detection accuracy before enforcing.
+          - generic [ref=e704] [cursor=pointer]:
+            - radio "Enforce Block responses containing detected prompt injection patterns. Use after validating detections in monitor mode." [ref=e705]
+            - generic [ref=e706]:
+              - generic [ref=e707]: Enforce
+              - generic [ref=e708]: Block responses containing detected prompt injection patterns. Use after validating detections in monitor mode.
+        - button "Save Changes" [ref=e710] [cursor=pointer]
+    - generic [ref=e711]:
+      - generic [ref=e713]:
+        - generic [ref=e714]:
+          - generic [ref=e715]: "2"
+          - generic [ref=e716]: Total Rules
+        - generic [ref=e717]:
+          - generic [ref=e718]: "0"
+          - generic [ref=e719]: Enabled
+        - generic [ref=e720]:
+          - generic [ref=e721]: "2"
+          - generic [ref=e722]: Blocklist
+        - generic [ref=e723]:
+          - generic [ref=e724]: "0"
+          - generic [ref=e725]: Allowlist
+        - generic [ref=e726]:
+          - generic [ref=e727]: "2"
+          - generic [ref=e728]: Default
+        - generic [ref=e729]:
+          - generic [ref=e730]: "0"
+          - generic [ref=e731]: Custom
+      - generic [ref=e733]:
+        - generic [ref=e734]:
+          - heading "Outbound Control" [level=3] [ref=e735]:
+            - img [ref=e736]
+            - text: Outbound Control
+          - button "Add Rule" [ref=e738] [cursor=pointer]:
+            - img [ref=e739]
+            - text: Add Rule
+        - generic [ref=e740]:
+          - generic [ref=e741]:
+            - generic [ref=e742]: "100"
+            - generic [ref=e743]: Data Exfiltration Services
+            - generic [ref=e745]: blocklist
+            - generic [ref=e747]: block
+            - generic [ref=e749]:
+              - generic [ref=e750]: "*.telegram.org"
+              - generic [ref=e751]: t.me
+              - generic [ref=e752]: "*.ngrok.io"
+              - generic [ref=e753] [cursor=pointer]: +8 more
+            - generic [ref=e754]:
+              - checkbox
+          - generic [ref=e756]:
+            - generic [ref=e757]: "200"
+            - generic [ref=e758]: Private Network Access
+            - generic [ref=e760]: blocklist
+            - generic [ref=e762]: block
+            - generic [ref=e764]:
+              - generic [ref=e765]: 127.0.0.0/8
+              - generic [ref=e766]: 10.0.0.0/8
+              - generic [ref=e767]: 172.16.0.0/12
+              - generic [ref=e768] [cursor=pointer]: +3 more
+            - generic [ref=e769]:
+              - checkbox
+          - generic [ref=e771]: No custom outbound rules yet. The default blocklist is active.
+      - generic [ref=e773]:
+        - heading "Test Destination" [level=3] [ref=e775]:
+          - img [ref=e776]
+          - text: Test Destination
+        - generic [ref=e778]:
+          - paragraph [ref=e779]: Test whether a destination would be blocked or allowed by the current outbound rules.
+          - generic [ref=e780]:
+            - generic [ref=e781]:
+              - generic [ref=e782]: Domain
+              - textbox "e.g. evil.ngrok.io" [ref=e783]
+            - generic [ref=e784]:
+              - generic [ref=e785]: IP (optional)
+              - textbox "e.g. 10.0.0.1" [ref=e786]
+            - generic [ref=e787]:
+              - generic [ref=e788]: Port
+              - spinbutton [ref=e789]
+          - button "Test" [ref=e790] [cursor=pointer]
+    - generic [ref=e791]:
+      - generic [ref=e792]:
+        - heading "HTTP Gateway" [level=3] [ref=e794]:
+          - img [ref=e795]
+          - text: HTTP Gateway
+        - generic [ref=e798]:
+          - paragraph [ref=e799]: Configure the HTTP Gateway for forward and reverse proxy with TLS inspection, bypass domains, and upstream targets.
+          - generic [ref=e800]:
+            - generic [ref=e801]:
+              - generic [ref=e802]: TLS Inspection
+              - generic [ref=e803]: When enabled, HTTPS requests are intercepted for content scanning. Requires the CA certificate to be trusted by clients.
+            - generic [ref=e804]:
+              - generic [ref=e805]: Disabled
+              - generic [ref=e806]:
+                - checkbox
+          - generic [ref=e808]:
+            - generic [ref=e809]: Bypass Domains
+            - generic [ref=e810]: Domains matching these patterns will not be TLS-inspected. Supports glob patterns (e.g. *.google.com).
+            - generic [ref=e812]: No bypass domains configured.
+            - generic [ref=e813]:
+              - textbox "*.example.com" [ref=e814]
+              - button "Add" [ref=e815] [cursor=pointer]
+              - button "Save Bypass List" [ref=e816] [cursor=pointer]
+          - generic [ref=e817]:
+            - button "Download CA Certificate" [ref=e818] [cursor=pointer]
+            - button "Download Setup Script" [ref=e819] [cursor=pointer]
+      - generic [ref=e820]:
+        - generic [ref=e821]:
+          - heading "Upstream Targets" [level=3] [ref=e822]:
+            - img [ref=e823]
+            - text: Upstream Targets
+          - button "Add Target" [ref=e826] [cursor=pointer]:
+            - img [ref=e827]
+            - text: Add Target
+        - generic [ref=e829]: No upstream targets configured.
+    - generic [ref=e831]:
+      - heading "Tool Security" [level=3] [ref=e833]:
+        - img [ref=e834]
+        - text: Tool Security
+      - generic [ref=e836]:
+        - paragraph [ref=e837]: Manage tool baselines, detect drift from expected tool configurations, and quarantine suspicious tools.
+        - generic [ref=e838]:
+          - generic [ref=e839]: Tool Baseline
+          - generic [ref=e840]:
+            - button "Capture Baseline" [ref=e841] [cursor=pointer]
+            - button "View Baseline" [ref=e842] [cursor=pointer]:
+              - img [ref=e843]
+              - text: View Baseline
+          - generic [ref=e846]: No baseline captured yet. Click "Capture Baseline" to create one.
+        - generic [ref=e847]:
+          - generic [ref=e848]: Drift Detection
+          - button "Check Drift" [ref=e850] [cursor=pointer]:
+            - img [ref=e851]
+            - text: Check Drift
+        - generic [ref=e853]:
+          - generic [ref=e854]: Quarantine
+          - generic [ref=e856]: No tools quarantined.
+          - generic [ref=e857]:
+            - textbox "Tool name to quarantine" [ref=e858]
+            - button "Quarantine" [ref=e859] [cursor=pointer]
