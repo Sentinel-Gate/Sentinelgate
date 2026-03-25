@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>co.sentinelgate</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/sentinel-gate</string>
+        <string>start</string>
+    </array>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <dict>
+        <key>SuccessfulExit</key>
+        <false/>
+    </dict>
+
+    <key>ThrottleInterval</key>
+    <integer>2</integer>
+
+    <key>WorkingDirectory</key>
+    <string>/usr/local/var/sentinel-gate</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>SENTINEL_GATE_STATE_PATH</key>
+        <string>/usr/local/var/sentinel-gate/state.json</string>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/usr/local/var/log/sentinel-gate.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/usr/local/var/log/sentinel-gate.err</string>
+</dict>
+</plist>

@@ -1,0 +1,10 @@
+#!/bin/sh
+# Pre-push hook: runs tests with race detector.
+# Install via: scripts/install-hooks.sh
+
+echo "pre-push: running tests with race detector..."
+if ! go test -race -count=1 -timeout 300s ./...; then
+    echo ""
+    echo "pre-push: tests failed. Fix the issues above before pushing."
+    exit 1
+fi

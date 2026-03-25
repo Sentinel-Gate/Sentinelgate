@@ -1,0 +1,7 @@
+[allowlist]
+description = "Allow test fixtures and smoke test data"
+paths = [
+    '''_test\.go$''',
+    '''scripts/smoke.*\.sh$''',
+    '''tests/e2e/global-setup\.ts$''',
+]

@@ -1,0 +1,37 @@
+[Unit]
+Description=SentinelGate - Universal Firewall for AI Agents
+Documentation=https://github.com/Sentinel-Gate/Sentinelgate
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/sentinel-gate start
+Restart=always
+RestartSec=2
+WatchdogSec=30
+
+# Security hardening
+User=sentinel-gate
+Group=sentinel-gate
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/sentinel-gate
+PrivateTmp=true
+
+# Resource limits
+LimitNOFILE=65536
+MemoryMax=512M
+
+# Environment
+Environment=SENTINEL_GATE_STATE_PATH=/var/lib/sentinel-gate/state.json
+EnvironmentFile=-/etc/sentinel-gate/env
+
+# Logging (stdout/stderr -> journald)
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=sentinel-gate
+
+[Install]
+WantedBy=multi-user.target

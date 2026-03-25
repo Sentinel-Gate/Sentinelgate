@@ -1,0 +1,78 @@
+# Build artifacts
+/sentinel-gate
+/adversarial-testserver
+*.exe
+
+# IDE and tools
+.vscode/
+*.swp
+
+# Test artifacts
+coverage.out
+*.test
+
+# Runtime state
+state.json
+state.json.bak
+state.json.lock
+
+# Session recordings (local test data)
+recordings/
+sg-recordings/
+
+# macOS
+**/.DS_Store
+
+# Evidence (generated at runtime)
+evidence-key.pem
+evidence.jsonl
+
+# Database (runtime)
+*.db
+*.db-wal
+*.db-shm
+
+# Versioned store (runtime)
+versioned/
+
+# Environment files (may contain API tokens)
+.env
+.env.*
+
+# E2E test secrets (GitHub token, API keys — NEVER commit)
+tests/e2e/.env.test
+tests/e2e/.env.secrets
+
+# Runtime config (generated)
+sentinel-gate.yaml
+
+# Dependencies
+**/__pycache__/
+**/node_modules/
+
+# Go workspace
+go.work
+go.work.sum
+
+# JetBrains IDEs
+.idea/
+
+# Playwright logs
+.playwright-mcp/
+
+# Test logs
+test-results*.log
+test-plan-status.md
+
+# Temporary files (atomic writes)
+*.tmp
+
+# PID files
+.sentinelgate/
+
+# Test result directories
+test-results/
+playwright-report/
+
+# Generated screenshots
+footer-result.png

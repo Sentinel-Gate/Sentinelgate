@@ -1,0 +1,49 @@
+version: "2"
+
+linters:
+  default: none
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+    - bodyclose
+    - nilerr
+    - gocritic
+    - ineffassign
+    - unconvert
+    - exhaustive
+    - noctx
+
+  settings:
+    errcheck:
+      exclude-functions:
+        - (io.Closer).Close
+        - (net.Conn).Close
+        - (*os.File).Close
+        - (net.Listener).Close
+        - (*net/http.Response).Body.Close
+        - (*crypto/tls.Conn).Close
+        - (net.Conn).SetReadDeadline
+        - fmt.Fprint
+        - fmt.Fprintf
+        - fmt.Fprintln
+        - os.Remove
+        - (*encoding/json.Encoder).Encode
+        - (*os.File).Write
+        - (*os.File).Sync
+        - (*github.com/spf13/cobra.Command).MarkFlagRequired
+    exhaustive:
+      default-signifies-exhaustive: true
+    gocritic:
+      disabled-checks:
+        - ifElseChain
+
+  exclusions:
+    rules:
+      - linters: [errcheck]
+        path: _test\.go
+      - linters: [noctx]
+        path: _test\.go
+      - linters: [bodyclose]
+        path: _test\.go
