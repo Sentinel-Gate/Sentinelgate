@@ -19,7 +19,7 @@
 </p>
 
 <p align="center">
-  <video src="assets/sentinelgate-demo-final.mp4" width="720"></video>
+  <video src="https://github.com/user-attachments/assets/2cb6864e-f00e-4b9e-9c39-b3523c77d50b" width="720" controls autoplay loop muted></video>
 </p>
 
 ---
