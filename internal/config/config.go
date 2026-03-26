@@ -19,6 +19,7 @@
 // For Pro features, see the sentinel-gate-pro module.
 package config
 
+import "os"
 
 // OSSConfig is the top-level configuration for Sentinel Gate OSS.
 // It contains only the essential fields for a minimalist MCP proxy.
@@ -278,8 +279,13 @@ type AuditFileConfig struct {
 func (c *OSSConfig) SetDefaults() {
 	// Server defaults — bind to localhost only for security.
 	// Users who need network access must explicitly set http_addr: ":8080" or "0.0.0.0:8080".
+	// Cloud platforms (Smithery, Cloud Run, etc.) set PORT to indicate the listening port.
 	if c.Server.HTTPAddr == "" {
-		c.Server.HTTPAddr = "127.0.0.1:8080"
+		if port := os.Getenv("PORT"); port != "" {
+			c.Server.HTTPAddr = ":" + port
+		} else {
+			c.Server.HTTPAddr = "127.0.0.1:8080"
+		}
 	}
 	if c.Server.LogLevel == "" {
 		c.Server.LogLevel = "info"

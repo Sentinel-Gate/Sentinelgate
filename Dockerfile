@@ -60,7 +60,8 @@ COPY --from=perms /data /data
 VOLUME ["/data"]
 ENV SENTINEL_GATE_STATE_PATH=/data/state.json
 # Bind to all interfaces inside container (default is localhost-only for security).
-ENV SENTINEL_GATE_SERVER_HTTP_ADDR=":8080"
+# Cloud platforms (Smithery, Cloud Run) override PORT at runtime.
+ENV PORT=8080
 
 # Run as non-root user
 USER nonroot:nonroot
